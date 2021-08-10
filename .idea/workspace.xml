@@ -12,7 +12,7 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="100ee6e9-d4ea-461c-a5a9-5fd9950678cf" name="Default Changelist" comment="13th commit">
+    <list default="true" id="100ee6e9-d4ea-461c-a5a9-5fd9950678cf" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/calendar_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/calendar_view.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -64,7 +64,7 @@
     <property name="android-custom-view/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/src/main/java/com/duke/orca/android/kotlin/lockscreencalendar/calendar/widget/CalendarView.kt_SELECTED" value="CalendarView" />
     <property name="com.intellij.openapi.externalSystem.service.settings.ExternalSystemGroupConfigurable" value="ALL" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
+    <property name="settings.editor.selected.configurable" value="org.jetbrains.plugins.github.ui.GithubSettingsConfigurable" />
   </component>
   <component name="RecentsManager">
     <key name="MoveKotlinTopLevelDeclarationsDialog.RECENTS_KEY">
@@ -229,7 +229,14 @@
       <option name="project" value="LOCAL" />
       <updated>1628594246521</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="2nd commit">
+      <created>1628595169790</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1628595169790</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -257,7 +264,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="2nd commit" />
     <MESSAGE value="3rd commit" />
     <MESSAGE value="4th commit" />
     <MESSAGE value="5th commit" />
@@ -269,6 +275,7 @@
     <MESSAGE value="11th commit" />
     <MESSAGE value="12th commit" />
     <MESSAGE value="13th commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="13th commit" />
+    <MESSAGE value="2nd commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="2nd commit" />
   </component>
 </project>
