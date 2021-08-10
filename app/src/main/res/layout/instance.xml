@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingBottom="1dp"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <View
+        android:id="@+id/view_calendar_color"
+        android:layout_width="@dimen/width_2dp"
+        android:layout_height="match_parent"
+        tools:background="@color/red_400"/>
+
+    <TextView
+        android:id="@+id/text_view_instance"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_2dp"
+        android:ellipsize="end"
+        android:includeFontPadding="false"
+        android:maxLines="1"
+        android:textColor="@color/high_emphasis_light"
+        android:textSize="@dimen/text_size_10dp"
+        tools:text="피아노 레슨"/>
+
+</LinearLayout>

@@ -1,0 +1,110 @@
+[
+    {
+        "merged": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/build/intermediates/merged_res/debug/navigation_nav_graph.xml.flat",
+        "source": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/src/main/res/navigation/nav_graph.xml"
+    },
+    {
+        "merged": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/build/intermediates/merged_res/debug/layout_calendar_view_item.xml.flat",
+        "source": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/src/main/res/layout/calendar_view_item.xml"
+    },
+    {
+        "merged": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/build/intermediates/merged_res/debug/mipmap-xhdpi_ic_launcher.webp.flat",
+        "source": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/src/main/res/mipmap-xhdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/build/intermediates/merged_res/debug/mipmap-mdpi_ic_launcher_round.webp.flat",
+        "source": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/src/main/res/mipmap-mdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/build/intermediates/merged_res/debug/mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml"
+    },
+    {
+        "merged": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/build/intermediates/merged_res/debug/anim_fade_out.xml.flat",
+        "source": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/src/main/res/anim/fade_out.xml"
+    },
+    {
+        "merged": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/build/intermediates/merged_res/debug/drawable_ic_sharp_event_24.xml.flat",
+        "source": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/src/main/res/drawable/ic_sharp_event_24.xml"
+    },
+    {
+        "merged": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/build/intermediates/merged_res/debug/anim_fade_in.xml.flat",
+        "source": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/src/main/res/anim/fade_in.xml"
+    },
+    {
+        "merged": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/build/intermediates/merged_res/debug/layout_fragment_calendar_view_pager.xml.flat",
+        "source": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/src/main/res/layout/fragment_calendar_view_pager.xml"
+    },
+    {
+        "merged": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/build/intermediates/merged_res/debug/layout_activity_main.xml.flat",
+        "source": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/src/main/res/layout/activity_main.xml"
+    },
+    {
+        "merged": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/build/intermediates/merged_res/debug/mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml"
+    },
+    {
+        "merged": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/build/intermediates/merged_res/debug/drawable-anydpi-v24_ic_launcher_foreground.xml.flat",
+        "source": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/build/generated/res/pngs/debug/drawable-anydpi-v24/ic_launcher_foreground.xml"
+    },
+    {
+        "merged": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/build/intermediates/merged_res/debug/mipmap-hdpi_ic_launcher_round.webp.flat",
+        "source": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/src/main/res/mipmap-hdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/build/intermediates/merged_res/debug/layout_permission.xml.flat",
+        "source": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/src/main/res/layout/permission.xml"
+    },
+    {
+        "merged": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/build/intermediates/merged_res/debug/layout_instance.xml.flat",
+        "source": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/src/main/res/layout/instance.xml"
+    },
+    {
+        "merged": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/build/intermediates/merged_res/debug/mipmap-xxhdpi_ic_launcher.webp.flat",
+        "source": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/src/main/res/mipmap-xxhdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/build/intermediates/merged_res/debug/mipmap-xhdpi_ic_launcher_round.webp.flat",
+        "source": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/src/main/res/mipmap-xhdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/build/intermediates/merged_res/debug/mipmap-hdpi_ic_launcher.webp.flat",
+        "source": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/src/main/res/mipmap-hdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/build/intermediates/merged_res/debug/layout_day_of_week.xml.flat",
+        "source": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/src/main/res/layout/day_of_week.xml"
+    },
+    {
+        "merged": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/build/intermediates/merged_res/debug/mipmap-mdpi_ic_launcher.webp.flat",
+        "source": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/src/main/res/mipmap-mdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/build/intermediates/merged_res/debug/layout_fragment_calendar_view.xml.flat",
+        "source": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/src/main/res/layout/fragment_calendar_view.xml"
+    },
+    {
+        "merged": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/build/intermediates/merged_res/debug/mipmap-xxhdpi_ic_launcher_round.webp.flat",
+        "source": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/build/intermediates/merged_res/debug/drawable_ic_launcher_background.xml.flat",
+        "source": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/src/main/res/drawable/ic_launcher_background.xml"
+    },
+    {
+        "merged": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/build/intermediates/merged_res/debug/drawable_background_calendar_view_item_selected.xml.flat",
+        "source": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/src/main/res/drawable/background_calendar_view_item_selected.xml"
+    },
+    {
+        "merged": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/build/intermediates/merged_res/debug/layout_fragment_permission_dialog.xml.flat",
+        "source": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/src/main/res/layout/fragment_permission_dialog.xml"
+    },
+    {
+        "merged": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/build/intermediates/merged_res/debug/mipmap-xxxhdpi_ic_launcher_round.webp.flat",
+        "source": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/build/intermediates/merged_res/debug/mipmap-xxxhdpi_ic_launcher.webp.flat",
+        "source": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/src/main/res/mipmap-xxxhdpi/ic_launcher.webp"
+    }
+]

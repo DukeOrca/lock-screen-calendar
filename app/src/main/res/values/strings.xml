@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">Lock Screen Calendar</string>
+
+    <string name="allow">ALLOW</string>
+    <string name="calendar">Calendar</string>
+    <string name="calendar_permission_rationale">Calendar permission is required to import events.</string>
+    <string name="deny">DENY</string>
+    <string name="permission_rationale">To use all features of the app, you must allow the following permissions.</string>
+    <string name="request_app_permissions">Request app permissions</string>
+    <string name="year"> </string>
+
+    <string-array name="months">
+        <item>JAN</item>
+        <item>FEB</item>
+        <item>MAR</item>
+        <item>APR</item>
+        <item>MAY</item>
+        <item>JUN</item>
+        <item>JUL</item>
+        <item>AUG</item>
+        <item>SEP</item>
+        <item>OCT</item>
+        <item>NOV</item>
+        <item>DEC</item>
+    </string-array>
+</resources>

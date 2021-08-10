@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CalendarView">
+        <attr name="itemHeight" format="dimension"/>
+        <attr name="itemTextSize" format="dimension"/>
+    </declare-styleable>
+</resources>
