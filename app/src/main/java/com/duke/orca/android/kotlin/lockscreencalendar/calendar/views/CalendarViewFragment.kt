@@ -6,17 +6,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.children
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.duke.orca.android.kotlin.lockscreencalendar.PACKAGE_NAME
 import com.duke.orca.android.kotlin.lockscreencalendar.base.BaseFragment
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.DAYS_PER_MONTH
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.DAYS_PER_WEEK
-import com.duke.orca.android.kotlin.lockscreencalendar.calendar.adapters.CalendarViewItem
-import com.duke.orca.android.kotlin.lockscreencalendar.calendar.adapters.CalendarViewItemAdapter
+import com.duke.orca.android.kotlin.lockscreencalendar.calendar.adapters.CalendarItem
+import com.duke.orca.android.kotlin.lockscreencalendar.calendar.adapters.CalendarItemAdapter
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.repository.CalendarRepository
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.util.getFirstDayOfWeekOfMonth
 import com.duke.orca.android.kotlin.lockscreencalendar.databinding.FragmentCalendarViewBinding
+import com.duke.orca.android.kotlin.lockscreencalendar.main.viewmodel.MainViewModel
 import kotlinx.coroutines.*
 import java.util.*
 
@@ -28,9 +31,10 @@ class CalendarViewFragment : BaseFragment<FragmentCalendarViewBinding>() {
         return FragmentCalendarViewBinding.inflate(inflater, container, false)
     }
 
-    private val adapter by lazy { CalendarViewItemAdapter(currentArray) }
+    private val adapter by lazy { CalendarItemAdapter(currentArray) }
     private val calendarRepository by lazy { CalendarRepository(requireContext().applicationContext) }
-    private val currentArray = arrayOfNulls<CalendarViewItem>(DAYS_PER_MONTH)
+    private val currentArray = arrayOfNulls<CalendarItem>(DAYS_PER_MONTH)
+    private val viewModel by activityViewModels<MainViewModel>()
 
     private var isDaysOfPreviousMonthVisible = true
 
@@ -43,6 +47,12 @@ class CalendarViewFragment : BaseFragment<FragmentCalendarViewBinding>() {
 
         val month = arguments?.getInt(Key.MONTH) ?: 0
         val year = arguments?.getInt(Key.YEAR) ?: 0
+
+        viewModel.calendarRepository.get(year, month)?.observe(viewLifecycleOwner, {
+            viewBinding.calendarView.init(it)
+        }) ?: let {
+            // 로드 요청필수.
+        }
 
         val calendar = Calendar.getInstance().apply {
             set(Calendar.MONTH, month)
@@ -67,56 +77,57 @@ class CalendarViewFragment : BaseFragment<FragmentCalendarViewBinding>() {
 
         isDaysOfPreviousMonthVisible = indexOfFirstDayOfMonth != 0
 
-        lifecycleScope.launch {
-            addDaysOfPreviousMonth(lastDayOfPreviousMonth, indexOfFirstDayOfMonth)
-            addDaysOfMonth(indexOfFirstDayOfMonth, indexOfLastDayOfMonth)
-            addDaysOfNextMonth(indexOfLastDayOfMonth)
-
-            initializeViews()
-
-            withContext(Dispatchers.IO) {
-                val updatedIndices = arrayListOf<Int>()
-
-                currentArray.filterNotNull().forEach {
-                    val DTSTART = Calendar.getInstance().apply {
-                        when(it) {
-                            is CalendarViewItem.DayOfPreviousMonth -> set(previousMonthCalendar.get(Calendar.YEAR), previousMonthCalendar.get(Calendar.MONTH), it.dayOfMonth)
-                            is CalendarViewItem.DayOfMonth -> set(year, month, it.dayOfMonth)
-                            is CalendarViewItem.DayOfNextMonth -> set(nextMonthCalendar.get(Calendar.YEAR), nextMonthCalendar.get(Calendar.MONTH), it.dayOfMonth)
-                        }
-                    }
-
-                    val DTEND = Calendar.getInstance().apply {
-                        when(it) {
-                            is CalendarViewItem.DayOfPreviousMonth -> set(previousMonthCalendar.get(Calendar.YEAR), previousMonthCalendar.get(Calendar.MONTH), it.dayOfMonth)
-                            is CalendarViewItem.DayOfMonth -> set(year, month, it.dayOfMonth)
-                            is CalendarViewItem.DayOfNextMonth -> set(nextMonthCalendar.get(Calendar.YEAR), nextMonthCalendar.get(Calendar.MONTH), it.dayOfMonth)
-                        }
-                    }
-
-                    DTSTART.set(Calendar.HOUR_OF_DAY, 0)
-                    DTSTART.set(Calendar.MINUTE, 0)
-                    DTSTART.set(Calendar.SECOND, 0)
-
-                    DTEND.set(Calendar.HOUR_OF_DAY, 23)
-                    DTEND.set(Calendar.MINUTE, 59)
-                    DTEND.set(Calendar.SECOND, 59)
-
-                    with(calendarRepository.instances(DTSTART, DTEND)) {
-                        if (isNotEmpty()) {
-                            it.instances.addAll(this)
-                            updatedIndices.add(it.position)
-                        }
-                    }
-                }
-
-                withContext(Dispatchers.Main) {
-                    updatedIndices.forEach {
-                        adapter.notifyItemChanged(it)
-                    }
-                }
-            }
-        }
+//        lifecycleScope.launch {
+//            addDaysOfPreviousMonth(lastDayOfPreviousMonth, indexOfFirstDayOfMonth)
+//            addDaysOfMonth(indexOfFirstDayOfMonth, indexOfLastDayOfMonth)
+//            addDaysOfNextMonth(indexOfLastDayOfMonth)
+//            viewBinding.calendarView.init(currentArray)
+//
+//            //initializeViews()
+//            calendarRepository // main call.
+//            withContext(Dispatchers.IO) {
+//                val updatedIndices = arrayListOf<Int>()
+//
+//                currentArray.filterNotNull().forEach {
+//                    val DTSTART = Calendar.getInstance().apply {
+//                        when(it) {
+//                            is CalendarItem.DayOfPreviousMonth -> set(previousMonthCalendar.get(Calendar.YEAR), previousMonthCalendar.get(Calendar.MONTH), it.dayOfMonth)
+//                            is CalendarItem.DayOfMonth -> set(year, month, it.dayOfMonth)
+//                            is CalendarItem.DayOfNextMonth -> set(nextMonthCalendar.get(Calendar.YEAR), nextMonthCalendar.get(Calendar.MONTH), it.dayOfMonth)
+//                        }
+//                    }
+//
+//                    val DTEND = Calendar.getInstance().apply {
+//                        when(it) {
+//                            is CalendarItem.DayOfPreviousMonth -> set(previousMonthCalendar.get(Calendar.YEAR), previousMonthCalendar.get(Calendar.MONTH), it.dayOfMonth)
+//                            is CalendarItem.DayOfMonth -> set(year, month, it.dayOfMonth)
+//                            is CalendarItem.DayOfNextMonth -> set(nextMonthCalendar.get(Calendar.YEAR), nextMonthCalendar.get(Calendar.MONTH), it.dayOfMonth)
+//                        }
+//                    }
+//
+//                    DTSTART.set(Calendar.HOUR_OF_DAY, 0)
+//                    DTSTART.set(Calendar.MINUTE, 0)
+//                    DTSTART.set(Calendar.SECOND, 0)
+//
+//                    DTEND.set(Calendar.HOUR_OF_DAY, 23)
+//                    DTEND.set(Calendar.MINUTE, 59)
+//                    DTEND.set(Calendar.SECOND, 59)
+//
+//                    with(calendarRepository.instances(DTSTART, DTEND)) {
+//                        if (isNotEmpty()) {
+//                            it.instances.addAll(this)
+//                            updatedIndices.add(it.position)
+//                        }
+//                    }
+//                }
+//
+//                withContext(Dispatchers.Main) {
+//                    viewBinding.calendarView.children.forEach {
+//                        it.invalidate()
+//                    }
+//                }
+//            }
+//        }
 
         return viewBinding.root
     }
@@ -139,19 +150,19 @@ class CalendarViewFragment : BaseFragment<FragmentCalendarViewBinding>() {
         val from = lastDayOfPreviousMonth - indexOfFirstDayOfMonth.dec()
 
         for ((i, j) in (from .. lastDayOfPreviousMonth).withIndex()) {
-            currentArray[i] = CalendarViewItem.DayOfPreviousMonth(j, position = i)
+            currentArray[i] = CalendarItem.DayOfPreviousMonth(j, position = i)
         }
     }
 
     private fun addDaysOfMonth(indexOfFirstDayOfMonth: Int, indexOfLastDayOfMonth: Int) {
         for ((i, j) in (indexOfFirstDayOfMonth until indexOfLastDayOfMonth).withIndex()) {
-            currentArray[j] = CalendarViewItem.DayOfMonth(i.inc(), position = j)
+            currentArray[j] = CalendarItem.DayOfMonth(i.inc(), position = j)
         }
     }
 
     private fun addDaysOfNextMonth(indexOfLastDayOfMonth: Int) {
         for ((i, j) in (indexOfLastDayOfMonth until DAYS_PER_MONTH).withIndex()) {
-            currentArray[j] = CalendarViewItem.DayOfNextMonth(i.inc(), position = j)
+            currentArray[j] = CalendarItem.DayOfNextMonth(i.inc(), position = j)
         }
     }
 

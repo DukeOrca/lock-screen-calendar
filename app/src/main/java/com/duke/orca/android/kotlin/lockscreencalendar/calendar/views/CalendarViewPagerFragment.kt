@@ -26,7 +26,6 @@ class CalendarViewPagerFragment : BaseFragment<FragmentCalendarViewPagerBinding>
 
     private val adapter by lazy { CalendarViewAdapter(requireActivity()) }
     private val months by lazy { resources.getStringArray(R.array.months) }
-    private val offScreenPageLimit = 3
 
     private val onPageChangeCallback by lazy {
         object : ViewPager2.OnPageChangeCallback() {
@@ -68,7 +67,6 @@ class CalendarViewPagerFragment : BaseFragment<FragmentCalendarViewPagerBinding>
 
     private fun initializeViews() {
         viewBinding.viewPager2.adapter = adapter
-        viewBinding.viewPager2.offscreenPageLimit = offScreenPageLimit
         viewBinding.viewPager2.registerOnPageChangeCallback(onPageChangeCallback)
         viewBinding.viewPager2.setCurrentItem(START_POSITION, false)
     }

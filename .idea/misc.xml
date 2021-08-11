@@ -6,12 +6,14 @@
         <entry key="app/src/main/res/drawable/background_calendar_item_selected.xml" value="0.1765625" />
         <entry key="app/src/main/res/drawable/background_calendar_view_item_selected.xml" value="0.1625" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1503623188405797" />
-        <entry key="app/src/main/res/layout/calendar_view.xml" value="0.1296875" />
+        <entry key="app/src/main/res/layout/calendar_item.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/calendar_item_view.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/calendar_view.xml" value="0.335" />
         <entry key="app/src/main/res/layout/calendar_view_item.xml" value="0.25" />
         <entry key="app/src/main/res/layout/day_of_month.xml" value="0.1503623188405797" />
         <entry key="app/src/main/res/layout/day_of_week.xml" value="0.1503623188405797" />
         <entry key="app/src/main/res/layout/fragment_blank.xml" value="0.1503623188405797" />
-        <entry key="app/src/main/res/layout/fragment_calendar_view.xml" value="0.1503623188405797" />
+        <entry key="app/src/main/res/layout/fragment_calendar_view.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_calendar_view_pager.xml" value="0.34937888198757766" />
         <entry key="app/src/main/res/layout/fragment_calendar_view_parent.xml" value="0.1503623188405797" />
         <entry key="app/src/main/res/layout/fragment_permission_dialog.xml" value="0.1" />

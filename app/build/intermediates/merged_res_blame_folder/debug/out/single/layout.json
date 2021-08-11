@@ -8,6 +8,10 @@
         "source": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/src/main/res/layout/activity_main.xml"
     },
     {
+        "merged": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/calendar_item_view.xml",
+        "source": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/src/main/res/layout/calendar_item_view.xml"
+    },
+    {
         "merged": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/instance.xml",
         "source": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/src/main/res/layout/instance.xml"
     },
@@ -26,6 +30,10 @@
     {
         "merged": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/day_of_week.xml",
         "source": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/src/main/res/layout/day_of_week.xml"
+    },
+    {
+        "merged": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/calendar_item.xml",
+        "source": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/src/main/res/layout/calendar_item.xml"
     },
     {
         "merged": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/fragment_permission_dialog.xml",

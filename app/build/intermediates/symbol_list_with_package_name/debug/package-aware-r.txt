@@ -2228,6 +2228,7 @@ id bounceStart
 id buttonPanel
 id cache_measures
 id calendarViewPagerFragment
+id calendar_view
 id cancel_action
 id cancel_button
 id carryVelocity
@@ -2736,7 +2737,7 @@ layout abc_search_view
 layout abc_select_dialog_material
 layout abc_tooltip
 layout activity_main
-layout calendar_view_item
+layout calendar_item_view
 layout custom_dialog
 layout day_of_week
 layout design_bottom_navigation_item

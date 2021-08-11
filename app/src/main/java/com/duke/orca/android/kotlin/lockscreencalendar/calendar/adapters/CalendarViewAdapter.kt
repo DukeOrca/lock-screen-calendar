@@ -22,7 +22,7 @@ class CalendarViewAdapter(fragmentActivity: FragmentActivity) : FragmentStateAda
     }
 
     companion object {
-        private const val ITEM_COUNT = 1_048_576
+        private const val ITEM_COUNT = Int.MAX_VALUE
         const val START_POSITION = ITEM_COUNT / 2
     }
 }

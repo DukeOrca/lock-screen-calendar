@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewbinding.ViewBinding;
 import androidx.viewbinding.ViewBindings;
 import com.duke.orca.android.kotlin.lockscreencalendar.R;
+import com.duke.orca.android.kotlin.lockscreencalendar.calendar.widget.CalendarView;
 import java.lang.NullPointerException;
 import java.lang.Override;
 import java.lang.String;
@@ -20,11 +21,15 @@ public final class FragmentCalendarViewBinding implements ViewBinding {
   private final ConstraintLayout rootView;
 
   @NonNull
+  public final CalendarView calendarView;
+
+  @NonNull
   public final RecyclerView recyclerView;
 
   private FragmentCalendarViewBinding(@NonNull ConstraintLayout rootView,
-      @NonNull RecyclerView recyclerView) {
+      @NonNull CalendarView calendarView, @NonNull RecyclerView recyclerView) {
     this.rootView = rootView;
+    this.calendarView = calendarView;
     this.recyclerView = recyclerView;
   }
 
@@ -55,13 +60,20 @@ public final class FragmentCalendarViewBinding implements ViewBinding {
     // This is done to optimize the compiled bytecode for size and performance.
     int id;
     missingId: {
+      id = R.id.calendar_view;
+      CalendarView calendarView = ViewBindings.findChildViewById(rootView, id);
+      if (calendarView == null) {
+        break missingId;
+      }
+
       id = R.id.recycler_view;
       RecyclerView recyclerView = ViewBindings.findChildViewById(rootView, id);
       if (recyclerView == null) {
         break missingId;
       }
 
-      return new FragmentCalendarViewBinding((ConstraintLayout) rootView, recyclerView);
+      return new FragmentCalendarViewBinding((ConstraintLayout) rootView, calendarView,
+          recyclerView);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));
