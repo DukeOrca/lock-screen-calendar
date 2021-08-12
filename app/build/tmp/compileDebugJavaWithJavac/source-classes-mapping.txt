@@ -1,7 +1,7 @@
 com/duke/orca/android/kotlin/lockscreencalendar/databinding/CalendarItemViewBinding.java
  com.duke.orca.android.kotlin.lockscreencalendar.databinding.CalendarItemViewBinding
-com/duke/orca/android/kotlin/lockscreencalendar/databinding/ActivityMainBinding.java
- com.duke.orca.android.kotlin.lockscreencalendar.databinding.ActivityMainBinding
+com/duke/orca/android/kotlin/lockscreencalendar/databinding/FragmentCalendarViewBinding.java
+ com.duke.orca.android.kotlin.lockscreencalendar.databinding.FragmentCalendarViewBinding
 com/duke/orca/android/kotlin/lockscreencalendar/databinding/PermissionBinding.java
  com.duke.orca.android.kotlin.lockscreencalendar.databinding.PermissionBinding
 com/duke/orca/android/kotlin/lockscreencalendar/databinding/FragmentCalendarViewPagerBinding.java
@@ -14,5 +14,5 @@ com/duke/orca/android/kotlin/lockscreencalendar/databinding/InstanceBinding.java
  com.duke.orca.android.kotlin.lockscreencalendar.databinding.InstanceBinding
 com/duke/orca/android/kotlin/lockscreencalendar/databinding/FragmentPermissionDialogBinding.java
  com.duke.orca.android.kotlin.lockscreencalendar.databinding.FragmentPermissionDialogBinding
-com/duke/orca/android/kotlin/lockscreencalendar/databinding/FragmentCalendarViewBinding.java
- com.duke.orca.android.kotlin.lockscreencalendar.databinding.FragmentCalendarViewBinding
+com/duke/orca/android/kotlin/lockscreencalendar/databinding/ActivityMainBinding.java
+ com.duke.orca.android.kotlin.lockscreencalendar.databinding.ActivityMainBinding

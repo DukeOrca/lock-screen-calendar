@@ -20,6 +20,7 @@ sealed class Model {
         val endDayOfMonth: Int,
         val eventId: Long,
         val id: Long,
+        val month: Int,
         val period: Int,
         val title: String
     ) : Model()

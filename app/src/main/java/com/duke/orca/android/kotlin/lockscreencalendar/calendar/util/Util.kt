@@ -22,6 +22,12 @@ fun Long.toMinute(): Int {
     }.get(Calendar.MINUTE)
 }
 
+fun Long.toMonth(): Int {
+    return calendar.also {
+        it.timeInMillis = this
+    }.get(Calendar.MONTH)
+}
+
 fun getFirstDayOfWeekOfMonth(year: Int, month: Int): Int {
     return calendar.apply {
         set(Calendar.YEAR, year)

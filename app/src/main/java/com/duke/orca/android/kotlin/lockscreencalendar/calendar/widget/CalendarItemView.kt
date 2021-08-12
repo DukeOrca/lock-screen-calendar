@@ -36,9 +36,6 @@ class CalendarItemView : View {
         if (canvas == null)
             return
 
-        if (item?.dayOfMonth == 2)
-            return
-
         val date = item?.dayOfMonth.toString()
         paint.getTextBounds(date, 0, date.length, bounds)
         val height = (height / 2 + bounds.height() / 2).toFloat()
@@ -53,14 +50,14 @@ class CalendarItemView : View {
 //        }
 //
         item?.instances?.forEachIndexed { index, instance ->
-            if (index > 1) {
+            if (index > 3) {
                 return@forEachIndexed
             }
 
             paint.getTextBounds(instance.title, 0, instance.title.length, bounds)
             canvas.drawText(instance.title,
                 (width / 2 - bounds.width() / 2).toFloat() - 2,
-                height + bounds.height() * (index.inc()), paint )
+                height + bounds.height() * index.inc(), paint )
         }
     }
 }
