@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="api_key" translatable="false">AIzaSyBEZHDAMhi2vX9_2GqNzTPR1I4zq-lzSu4</string>
+
+    <!-- https://www.googleapis.com/calendar/v3/calendars/en.uk%23holiday%40group.v.calendar.google.com/events?key=AIzaSyBEZHDAMhi2vX9_2GqNzTPR1I4zq-lzSu4 -->
+</resources>

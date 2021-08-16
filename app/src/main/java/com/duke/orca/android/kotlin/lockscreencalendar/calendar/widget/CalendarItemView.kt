@@ -10,7 +10,7 @@ import com.duke.orca.android.kotlin.lockscreencalendar.BLANK
 import com.duke.orca.android.kotlin.lockscreencalendar.R
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.DAYS_PER_WEEK
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.VISIBLE_INSTANCE_COUNT
-import com.duke.orca.android.kotlin.lockscreencalendar.calendar.adapter.CalendarItem
+import com.duke.orca.android.kotlin.lockscreencalendar.calendar.model.Model.CalendarItem
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.widget.CalendarItemView.Height.INSTANCE
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.widget.CalendarItemView.Margin.CALENDAR_COLOR_END
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.widget.CalendarItemView.Margin.CALENDAR_COLOR_START

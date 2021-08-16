@@ -9,8 +9,8 @@ import com.duke.orca.android.kotlin.lockscreencalendar.R
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.DAYS_PER_MONTH
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.DAYS_PER_WEEK
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.WEEKS_PER_MONTH
-import com.duke.orca.android.kotlin.lockscreencalendar.calendar.adapter.CalendarItem
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.model.Model
+import com.duke.orca.android.kotlin.lockscreencalendar.calendar.model.Model.CalendarItem
 import com.duke.orca.android.kotlin.lockscreencalendar.util.toPx
 
 class CalendarView : ViewGroup {

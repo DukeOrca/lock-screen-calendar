@@ -2,6 +2,7 @@ package com.duke.orca.android.kotlin.lockscreencalendar.calendar.model
 
 import androidx.annotation.ColorInt
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.ONE
+import com.duke.orca.android.kotlin.lockscreencalendar.calendar.VISIBLE_INSTANCE_COUNT
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.entity.Entity
 
 sealed class Model {
@@ -22,5 +23,39 @@ sealed class Model {
             ONE
         else
             duration.inc()
+    }
+
+    sealed class CalendarItem {
+        abstract val dayOfMonth: Int
+        abstract val instances: ArrayList<Model.Instance>
+        abstract val position: Int
+        abstract val visibleInstances: Array<Model.Instance?>
+
+        open class DayOfMonth(
+            override val dayOfMonth: Int,
+            override val instances: ArrayList<Model.Instance> = arrayListOf(),
+            override val position: Int,
+            override val visibleInstances: Array<Model.Instance?> = arrayOfNulls(
+                VISIBLE_INSTANCE_COUNT
+            )
+        ) : CalendarItem()
+
+        class DayOfPreviousMonth(
+            override val dayOfMonth: Int,
+            override val instances: ArrayList<Model.Instance> = arrayListOf(),
+            override val position: Int,
+            override val visibleInstances: Array<Model.Instance?> = arrayOfNulls(
+                VISIBLE_INSTANCE_COUNT
+            )
+        ) : CalendarItem()
+
+        class DayOfNextMonth(
+            override val dayOfMonth: Int,
+            override val instances: ArrayList<Model.Instance> = arrayListOf(),
+            override val position: Int,
+            override val visibleInstances: Array<Model.Instance?> = arrayOfNulls(
+                VISIBLE_INSTANCE_COUNT
+            )
+        ) : CalendarItem()
     }
 }

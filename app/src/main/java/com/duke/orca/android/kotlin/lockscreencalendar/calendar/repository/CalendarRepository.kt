@@ -22,9 +22,9 @@ import com.duke.orca.android.kotlin.lockscreencalendar.BLANK
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.DAYS_PER_MONTH
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.DAYS_PER_WEEK
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.VISIBLE_INSTANCE_COUNT
-import com.duke.orca.android.kotlin.lockscreencalendar.calendar.adapter.CalendarItem
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.entity.Entity
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.model.Model
+import com.duke.orca.android.kotlin.lockscreencalendar.calendar.model.Model.CalendarItem
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.util.getFirstDayOfWeekOfMonth
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.util.toDayOfMonth
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.util.toMonth
@@ -185,7 +185,7 @@ class CalendarRepository(private val applicationContext: Context) {
             super.onQueryComplete(token, cookie, cursor)
             cursor ?: return
 
-            val calendarItems = arrayOfNulls<CalendarItem>(DAYS_PER_MONTH)
+            val calendarItems = arrayOfNulls<Model.CalendarItem>(DAYS_PER_MONTH)
             val instances = arrayListOf<Model.Instance>()
             val month = token % 100
             val year = token / 100
@@ -337,7 +337,7 @@ class CalendarRepository(private val applicationContext: Context) {
             val from = lastDayOfPreviousMonth - indexOfFirstDayOfMonth.dec()
 
             for ((i, j) in (from .. lastDayOfPreviousMonth).withIndex()) {
-                calendarItems[i] = CalendarItem.DayOfPreviousMonth(j, position = i)
+                calendarItems[i] = Model.CalendarItem.DayOfPreviousMonth(j, position = i)
             }
         }
 

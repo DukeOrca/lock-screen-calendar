@@ -6,7 +6,6 @@ import android.widget.FrameLayout
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
 import com.duke.orca.android.kotlin.lockscreencalendar.R
 import com.duke.orca.android.kotlin.lockscreencalendar.main.viewmodel.MainViewModel
 import com.duke.orca.android.kotlin.lockscreencalendar.permission.PermissionChecker
