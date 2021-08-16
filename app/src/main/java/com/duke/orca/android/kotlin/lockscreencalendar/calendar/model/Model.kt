@@ -1,27 +1,26 @@
 package com.duke.orca.android.kotlin.lockscreencalendar.calendar.model
 
 import androidx.annotation.ColorInt
+import com.duke.orca.android.kotlin.lockscreencalendar.calendar.ONE
+import com.duke.orca.android.kotlin.lockscreencalendar.calendar.entity.Entity
 
 sealed class Model {
-    data class Calendar(
-        val id: Long,
-        val name: String
-    ) : Model()
-
     data class Instance (
-        val allDay: Boolean,
-        val begin: Long,
+        val entity: Entity.Instance,
+        val allDay: Boolean = entity.allDay,
         val beginDayOfMonth: Int,
         @ColorInt
-        val calendarColor: Int,
-        val calendarDisplayName: String,
-        val calendarId: Long,
-        val end: Long,
+        val calendarColor: Int = entity.calendarColor,
+        val duration: Int,
         val endDayOfMonth: Int,
-        val eventId: Long,
-        val id: Long,
-        val month: Int,
-        val period: Int,
-        val title: String
-    ) : Model()
+        val fillBackground: Boolean,
+        val isVisible: Boolean = true,
+        val month: Int = entity.month,
+        val title: String = entity.title
+    ) : Model() {
+        fun columnCount() = if (entity.allDay)
+            ONE
+        else
+            duration.inc()
+    }
 }

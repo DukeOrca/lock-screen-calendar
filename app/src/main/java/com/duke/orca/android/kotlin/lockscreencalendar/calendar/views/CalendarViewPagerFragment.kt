@@ -8,8 +8,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.duke.orca.android.kotlin.lockscreencalendar.R
 import com.duke.orca.android.kotlin.lockscreencalendar.base.BaseFragment
-import com.duke.orca.android.kotlin.lockscreencalendar.calendar.adapters.CalendarViewAdapter
-import com.duke.orca.android.kotlin.lockscreencalendar.calendar.adapters.CalendarViewAdapter.Companion.START_POSITION
+import com.duke.orca.android.kotlin.lockscreencalendar.calendar.adapter.CalendarViewAdapter
+import com.duke.orca.android.kotlin.lockscreencalendar.calendar.adapter.CalendarViewAdapter.Companion.START_POSITION
 import com.duke.orca.android.kotlin.lockscreencalendar.databinding.FragmentCalendarViewPagerBinding
 import com.duke.orca.android.kotlin.lockscreencalendar.main.viewmodel.MainViewModel
 import java.util.*
@@ -26,6 +26,7 @@ class CalendarViewPagerFragment : BaseFragment<FragmentCalendarViewPagerBinding>
 
     private val adapter by lazy { CalendarViewAdapter(requireActivity()) }
     private val months by lazy { resources.getStringArray(R.array.months) }
+    private val offscreenPageLimit = 6
 
     private val onPageChangeCallback by lazy {
         object : ViewPager2.OnPageChangeCallback() {
@@ -67,6 +68,7 @@ class CalendarViewPagerFragment : BaseFragment<FragmentCalendarViewPagerBinding>
 
     private fun initializeViews() {
         viewBinding.viewPager2.adapter = adapter
+        viewBinding.viewPager2.offscreenPageLimit = offscreenPageLimit
         viewBinding.viewPager2.registerOnPageChangeCallback(onPageChangeCallback)
         viewBinding.viewPager2.setCurrentItem(START_POSITION, false)
     }

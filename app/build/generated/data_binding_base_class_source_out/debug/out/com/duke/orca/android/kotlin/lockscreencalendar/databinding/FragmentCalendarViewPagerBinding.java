@@ -21,6 +21,9 @@ public final class FragmentCalendarViewPagerBinding implements ViewBinding {
   private final ConstraintLayout rootView;
 
   @NonNull
+  public final View divider;
+
+  @NonNull
   public final TextView textViewMonth;
 
   @NonNull
@@ -30,9 +33,10 @@ public final class FragmentCalendarViewPagerBinding implements ViewBinding {
   public final ViewPager2 viewPager2;
 
   private FragmentCalendarViewPagerBinding(@NonNull ConstraintLayout rootView,
-      @NonNull TextView textViewMonth, @NonNull TextView textViewYear,
+      @NonNull View divider, @NonNull TextView textViewMonth, @NonNull TextView textViewYear,
       @NonNull ViewPager2 viewPager2) {
     this.rootView = rootView;
+    this.divider = divider;
     this.textViewMonth = textViewMonth;
     this.textViewYear = textViewYear;
     this.viewPager2 = viewPager2;
@@ -65,6 +69,12 @@ public final class FragmentCalendarViewPagerBinding implements ViewBinding {
     // This is done to optimize the compiled bytecode for size and performance.
     int id;
     missingId: {
+      id = R.id.divider;
+      View divider = ViewBindings.findChildViewById(rootView, id);
+      if (divider == null) {
+        break missingId;
+      }
+
       id = R.id.text_view_month;
       TextView textViewMonth = ViewBindings.findChildViewById(rootView, id);
       if (textViewMonth == null) {
@@ -83,8 +93,8 @@ public final class FragmentCalendarViewPagerBinding implements ViewBinding {
         break missingId;
       }
 
-      return new FragmentCalendarViewPagerBinding((ConstraintLayout) rootView, textViewMonth,
-          textViewYear, viewPager2);
+      return new FragmentCalendarViewPagerBinding((ConstraintLayout) rootView, divider,
+          textViewMonth, textViewYear, viewPager2);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

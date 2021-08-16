@@ -9,8 +9,9 @@ import com.duke.orca.android.kotlin.lockscreencalendar.R
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.DAYS_PER_MONTH
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.DAYS_PER_WEEK
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.WEEKS_PER_MONTH
-import com.duke.orca.android.kotlin.lockscreencalendar.calendar.adapters.CalendarItem
+import com.duke.orca.android.kotlin.lockscreencalendar.calendar.adapter.CalendarItem
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.model.Model
+import com.duke.orca.android.kotlin.lockscreencalendar.util.toPx
 
 class CalendarView : ViewGroup {
     constructor(context: Context) : super(context)
@@ -28,7 +29,6 @@ class CalendarView : ViewGroup {
     }
 
     private var itemHeight = 0F
-    private var itemTextSize = 0F
 
     private fun getAttrs(attrs: AttributeSet) {
         applyStyledAttributes(context.obtainStyledAttributes(attrs, R.styleable.CalendarView))
@@ -46,21 +46,21 @@ class CalendarView : ViewGroup {
     }
 
     private fun applyStyledAttributes(styledAttributes: TypedArray) {
-        itemHeight = styledAttributes.getDimension(R.styleable.CalendarView_itemHeight, 0F)
-        itemTextSize = styledAttributes.getDimension(R.styleable.CalendarView_itemTextSize, 0F)
+        itemHeight = styledAttributes.getDimension(R.styleable.CalendarView_itemHeight, 80F.toPx)
 
         styledAttributes.recycle()
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-        val h = 40 * WEEKS_PER_MONTH
-        setMeasuredDimension(getDefaultSize(suggestedMinimumWidth, widthMeasureSpec), h)
+        val measuredHeight = itemHeight * WEEKS_PER_MONTH
+
+        setMeasuredDimension(getDefaultSize(suggestedMinimumWidth, widthMeasureSpec), measuredHeight.toInt())
     }
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
         val width = (width / DAYS_PER_WEEK).toFloat()
-        val height = (160 * 6 / WEEKS_PER_MONTH).toFloat()
+        val height = itemHeight
 
         children.forEachIndexed { index, view ->
             val left = (index % DAYS_PER_WEEK) * width
@@ -72,7 +72,6 @@ class CalendarView : ViewGroup {
 
     fun init(currentArray: Array<CalendarItem?>) {
         repeat(DAYS_PER_MONTH) { index ->
-            println("this call??, $index")
             addView(
                 CalendarItemView(context, currentArray[index])
 //                CalendarItemView(context, currentArray[index]).apply {

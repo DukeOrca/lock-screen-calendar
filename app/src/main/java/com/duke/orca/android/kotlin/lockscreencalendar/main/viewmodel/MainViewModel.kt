@@ -10,7 +10,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val calendarRepository = CalendarRepository(application.applicationContext)
 
     fun load() {
-        calendarRepository.load()
+        calendarRepository.initialLoad()
     }
 
     override fun onCleared() {
