@@ -26,13 +26,13 @@ sealed class Model {
     }
 
     sealed class CalendarItem {
-        abstract val dayOfMonth: Int
+        abstract val date: Int
         abstract val instances: ArrayList<Model.Instance>
         abstract val position: Int
         abstract val visibleInstances: Array<Model.Instance?>
 
         open class DayOfMonth(
-            override val dayOfMonth: Int,
+            override val date: Int,
             override val instances: ArrayList<Model.Instance> = arrayListOf(),
             override val position: Int,
             override val visibleInstances: Array<Model.Instance?> = arrayOfNulls(
@@ -41,7 +41,7 @@ sealed class Model {
         ) : CalendarItem()
 
         class DayOfPreviousMonth(
-            override val dayOfMonth: Int,
+            override val date: Int,
             override val instances: ArrayList<Model.Instance> = arrayListOf(),
             override val position: Int,
             override val visibleInstances: Array<Model.Instance?> = arrayOfNulls(
@@ -50,7 +50,7 @@ sealed class Model {
         ) : CalendarItem()
 
         class DayOfNextMonth(
-            override val dayOfMonth: Int,
+            override val date: Int,
             override val instances: ArrayList<Model.Instance> = arrayListOf(),
             override val position: Int,
             override val visibleInstances: Array<Model.Instance?> = arrayOfNulls(

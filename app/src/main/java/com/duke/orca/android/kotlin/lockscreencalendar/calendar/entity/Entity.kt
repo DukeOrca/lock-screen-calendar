@@ -8,6 +8,11 @@ sealed class Entity {
         val name: String
     ) : Entity()
 
+    data class Event(
+        val id: Long,
+        val DTSTART: Long
+    ): Entity()
+
     data class Instance (
         val allDay: Boolean,
         val begin: Long,

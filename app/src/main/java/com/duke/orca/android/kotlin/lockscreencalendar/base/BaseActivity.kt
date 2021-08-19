@@ -1,27 +1,19 @@
 package com.duke.orca.android.kotlin.lockscreencalendar.base
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
+import androidx.activity.result.ActivityResultLauncher
 import androidx.annotation.CallSuper
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewbinding.ViewBinding
 
-abstract class BaseActivity<VB: ViewBinding> : AppCompatActivity() {
-    private var _viewBinding: VB? = null
-    protected val viewBinding: VB
-        get() = _viewBinding!!
+open class BaseActivity : AppCompatActivity() {
+    private val activityResultLauncherMap = mutableMapOf<String, ActivityResultLauncher<Intent>>()
 
-    abstract fun inflate(layoutInflater: LayoutInflater): VB
-
-    @CallSuper
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        _viewBinding = inflate(layoutInflater)
-        setContentView(viewBinding.root)
+    protected fun putActivityResultLauncher(key: String, value: ActivityResultLauncher<Intent>) {
+        activityResultLauncherMap[key] = value
     }
 
-    override fun onDestroy() {
-        _viewBinding = null
-        super.onDestroy()
-    }
+    protected fun getActivityResultLauncher(key: String) = activityResultLauncherMap[key]
 }

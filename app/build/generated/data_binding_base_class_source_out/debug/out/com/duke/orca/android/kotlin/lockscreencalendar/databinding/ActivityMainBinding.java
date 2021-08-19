@@ -5,12 +5,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.FragmentContainerView;
 import androidx.viewbinding.ViewBinding;
 import androidx.viewbinding.ViewBindings;
+import androidx.viewpager2.widget.ViewPager2;
 import com.duke.orca.android.kotlin.lockscreencalendar.R;
 import java.lang.NullPointerException;
 import java.lang.Override;
@@ -21,16 +24,34 @@ public final class ActivityMainBinding implements ViewBinding {
   private final ConstraintLayout rootView;
 
   @NonNull
+  public final FragmentContainerView fragmentContainerView;
+
+  @NonNull
   public final FrameLayout frameLayout;
 
   @NonNull
-  public final FragmentContainerView navHostFragment;
+  public final LinearLayout linearLayoutInsert;
 
-  private ActivityMainBinding(@NonNull ConstraintLayout rootView, @NonNull FrameLayout frameLayout,
-      @NonNull FragmentContainerView navHostFragment) {
+  @NonNull
+  public final TextView textViewMonth;
+
+  @NonNull
+  public final TextView textViewYear;
+
+  @NonNull
+  public final ViewPager2 viewPager2;
+
+  private ActivityMainBinding(@NonNull ConstraintLayout rootView,
+      @NonNull FragmentContainerView fragmentContainerView, @NonNull FrameLayout frameLayout,
+      @NonNull LinearLayout linearLayoutInsert, @NonNull TextView textViewMonth,
+      @NonNull TextView textViewYear, @NonNull ViewPager2 viewPager2) {
     this.rootView = rootView;
+    this.fragmentContainerView = fragmentContainerView;
     this.frameLayout = frameLayout;
-    this.navHostFragment = navHostFragment;
+    this.linearLayoutInsert = linearLayoutInsert;
+    this.textViewMonth = textViewMonth;
+    this.textViewYear = textViewYear;
+    this.viewPager2 = viewPager2;
   }
 
   @Override
@@ -60,19 +81,44 @@ public final class ActivityMainBinding implements ViewBinding {
     // This is done to optimize the compiled bytecode for size and performance.
     int id;
     missingId: {
+      id = R.id.fragment_container_view;
+      FragmentContainerView fragmentContainerView = ViewBindings.findChildViewById(rootView, id);
+      if (fragmentContainerView == null) {
+        break missingId;
+      }
+
       id = R.id.frame_layout;
       FrameLayout frameLayout = ViewBindings.findChildViewById(rootView, id);
       if (frameLayout == null) {
         break missingId;
       }
 
-      id = R.id.nav_host_fragment;
-      FragmentContainerView navHostFragment = ViewBindings.findChildViewById(rootView, id);
-      if (navHostFragment == null) {
+      id = R.id.linear_layout_insert;
+      LinearLayout linearLayoutInsert = ViewBindings.findChildViewById(rootView, id);
+      if (linearLayoutInsert == null) {
         break missingId;
       }
 
-      return new ActivityMainBinding((ConstraintLayout) rootView, frameLayout, navHostFragment);
+      id = R.id.text_view_month;
+      TextView textViewMonth = ViewBindings.findChildViewById(rootView, id);
+      if (textViewMonth == null) {
+        break missingId;
+      }
+
+      id = R.id.text_view_year;
+      TextView textViewYear = ViewBindings.findChildViewById(rootView, id);
+      if (textViewYear == null) {
+        break missingId;
+      }
+
+      id = R.id.view_pager2;
+      ViewPager2 viewPager2 = ViewBindings.findChildViewById(rootView, id);
+      if (viewPager2 == null) {
+        break missingId;
+      }
+
+      return new ActivityMainBinding((ConstraintLayout) rootView, fragmentContainerView,
+          frameLayout, linearLayoutInsert, textViewMonth, textViewYear, viewPager2);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

@@ -11,9 +11,25 @@ import com.duke.orca.android.kotlin.lockscreencalendar.calendar.DAYS_PER_WEEK
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.WEEKS_PER_MONTH
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.model.Model
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.model.Model.CalendarItem
+import com.duke.orca.android.kotlin.lockscreencalendar.calendar.util.getFirstDayOfWeekOfMonth
 import com.duke.orca.android.kotlin.lockscreencalendar.util.toPx
+import java.util.*
 
 class CalendarView : ViewGroup {
+    private var onItemClickListener: OnItemClickListener? = null
+
+    private var selectedPosition = -1
+    private var selectedCalendarItem: CalendarItem? = null
+    private var currentArray = arrayOfNulls<CalendarItem?>(DAYS_PER_MONTH)
+
+    interface OnItemClickListener {
+        fun onItemClick(item: CalendarItem)
+    }
+
+    fun setOnItemClickListener(onItemClickListener: OnItemClickListener) {
+        this.onItemClickListener = onItemClickListener
+    }
+
     constructor(context: Context) : super(context)
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
@@ -67,45 +83,114 @@ class CalendarView : ViewGroup {
             val top = (index / DAYS_PER_WEEK) * height
 
             view.layout(left.toInt(), top.toInt(), (left + width).toInt(), (top + height).toInt())
+            view.setOnClickListener {
+                val item = currentArray?.get(index) ?: return@setOnClickListener
+                val position = currentArray?.get(index)?.position ?: -1
+
+                if (selectedPosition == position) {
+                    // 뷰페이저 오픈.
+                    // 인스턴스 없는 경우 인서트 오픈.
+                } else {
+                    if (selectedPosition != -1) {
+                        getChildAt(selectedPosition).background = null
+                    }
+
+                    selectedCalendarItem = item
+                    selectedPosition = position
+                    view.setBackgroundResource(R.drawable.background_calendar_view_item_selected)
+                    // 인스턴스가 있는 경우, 뷰페이저 오픈.
+                }
+
+                onItemClickListener?.onItemClick(item)
+            }
+
+            view.tag = index
+        }
+    }
+
+    fun init(year: Int, month: Int) {
+        val calendar = Calendar.getInstance().apply {
+            set(Calendar.YEAR, year)
+            set(Calendar.MONTH, month)
+        }
+
+        val previousMonthCalendar = Calendar.getInstance().apply {
+            set(Calendar.YEAR, calendar.get(Calendar.YEAR))
+            set(Calendar.MONTH, calendar.get(Calendar.MONTH))
+            add(Calendar.MONTH, -1)
+        }
+
+        val nextMonthCalendar = Calendar.getInstance().apply {
+            set(Calendar.YEAR, calendar.get(Calendar.YEAR))
+            set(Calendar.MONTH, calendar.get(Calendar.MONTH))
+            add(Calendar.MONTH, 1)
+        }
+
+        val previousMonth = previousMonthCalendar.get(Calendar.MONTH)
+        val nextMonth = nextMonthCalendar.get(Calendar.MONTH)
+
+        val indexOfFirstDayOfMonth = getFirstDayOfWeekOfMonth(year, month).dec()
+        val indexOfLastDayOfMonth = indexOfFirstDayOfMonth + calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
+
+        val lastDayOfPreviousMonth = previousMonthCalendar.getActualMaximum(Calendar.DAY_OF_MONTH)
+        val firstVisibleDayOfPreviousMonth = lastDayOfPreviousMonth - indexOfFirstDayOfMonth
+
+        addDaysOfPreviousMonth(currentArray, lastDayOfPreviousMonth, indexOfFirstDayOfMonth)
+        addDaysOfMonth(currentArray, indexOfFirstDayOfMonth, indexOfLastDayOfMonth)
+        addDaysOfNextMonth(currentArray, indexOfLastDayOfMonth)
+
+        repeat(DAYS_PER_MONTH) { index ->
+            addView(CalendarItemView(context, currentArray[index]).apply {
+                setOnClickListener { currentArray[index]?.let {
+                    onItemClickListener?.onItemClick(it)
+                } }
+            })
         }
     }
 
     fun init(currentArray: Array<CalendarItem?>) {
-        repeat(DAYS_PER_MONTH) { index ->
-            addView(
-                CalendarItemView(context, currentArray[index])
-//                CalendarItemView(context, currentArray[index]).apply {
-//                    setOnClickListener {
-//
-//                        if (it is ViewGroup) {
-//                            this@CalendarView.getChildAt(0).also { v ->
-//                                val tv = TextView(context).apply {
-//                                    layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
-//
-//                                    setBackgroundColor(Color.GREEN)
-//                                    text = "ttt"
-//                                    tag = index // addView 에서 requestLayout 호출함
-//                                }
-//                                if (v is CalendarItemView) {
-//                                    v.addView(tv, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT))
-//                                    v.notiadd(tv)
-//                                    //v.setBackgroundColor(Color.YELLOW)
-//                                    Toast.makeText(context, "hi? ${tv.tag}", Toast.LENGTH_SHORT).show()
-//                                }
-//                            }
-//
-//                        }
-//                    }
-//                }
-                //TextView(context).apply { text = "a" }
-                //CalendarItemViewBinding.inflate(LayoutInflater.from(context), this, false).root
-            )
+        //this.currentArray = currentArray
+
+        //removeAllViews()
+
+//        repeat(DAYS_PER_MONTH) { index ->
+//            addView(CalendarItemView(context, currentArray[index]).apply {
+//                setOnClickListener { currentArray[index]?.let {
+//                    onItemClickListener?.onItemClick(it)
+//                } }
+//            })
+//        }
+
+        children.forEachIndexed { index, view ->
+            if (view is CalendarItemView) {
+                currentArray[index]?.let {
+                    view.setData(it)
+                }
+            }
         }
     }
 
-    fun s(currentArray: Array<Model.Instance>) {
-        currentArray.forEach {
+    private fun addDaysOfPreviousMonth(calendarItems: Array<CalendarItem?>, lastDayOfPreviousMonth: Int, indexOfFirstDayOfMonth: Int) {
+        if (indexOfFirstDayOfMonth == 0) {
+            return
+        }
 
+        val from = lastDayOfPreviousMonth - indexOfFirstDayOfMonth.dec()
+
+        for ((i, j) in (from .. lastDayOfPreviousMonth).withIndex()) {
+            calendarItems[i] = Model.CalendarItem.DayOfPreviousMonth(j, position = i)
+        }
+    }
+
+    private fun addDaysOfMonth(calendarItems: Array<CalendarItem?>, indexOfFirstDayOfMonth: Int, indexOfLastDayOfMonth: Int) {
+        for ((i, j) in (indexOfFirstDayOfMonth until indexOfLastDayOfMonth).withIndex()) {
+            calendarItems[j] = CalendarItem.DayOfMonth(i.inc(), position = j)
+        }
+    }
+
+    private fun addDaysOfNextMonth(calendarItems: Array<CalendarItem?>, indexOfLastDayOfMonth: Int) {
+        for ((i, j) in (indexOfLastDayOfMonth until DAYS_PER_MONTH).withIndex()) {
+            calendarItems[j] = CalendarItem.DayOfNextMonth(i.inc(), position = j)
         }
     }
 }

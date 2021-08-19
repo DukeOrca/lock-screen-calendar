@@ -28,8 +28,4 @@ class SingleLiveEvent<T> : MutableLiveData<T>() {
     fun call() {
         value = null
     }
-
-    fun clear() {
-        atomicBoolean.set(false)
-    }
 }
