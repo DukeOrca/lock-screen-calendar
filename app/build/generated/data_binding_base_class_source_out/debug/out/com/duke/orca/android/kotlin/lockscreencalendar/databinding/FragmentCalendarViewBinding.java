@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewbinding.ViewBinding;
 import androidx.viewbinding.ViewBindings;
 import com.duke.orca.android.kotlin.lockscreencalendar.R;
@@ -23,14 +22,10 @@ public final class FragmentCalendarViewBinding implements ViewBinding {
   @NonNull
   public final CalendarView calendarView;
 
-  @NonNull
-  public final RecyclerView recyclerView;
-
   private FragmentCalendarViewBinding(@NonNull ConstraintLayout rootView,
-      @NonNull CalendarView calendarView, @NonNull RecyclerView recyclerView) {
+      @NonNull CalendarView calendarView) {
     this.rootView = rootView;
     this.calendarView = calendarView;
-    this.recyclerView = recyclerView;
   }
 
   @Override
@@ -66,14 +61,7 @@ public final class FragmentCalendarViewBinding implements ViewBinding {
         break missingId;
       }
 
-      id = R.id.recycler_view;
-      RecyclerView recyclerView = ViewBindings.findChildViewById(rootView, id);
-      if (recyclerView == null) {
-        break missingId;
-      }
-
-      return new FragmentCalendarViewBinding((ConstraintLayout) rootView, calendarView,
-          recyclerView);
+      return new FragmentCalendarViewBinding((ConstraintLayout) rootView, calendarView);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

@@ -1,4 +1,4 @@
-@file:Suppress("LocalVariableName", "ObjectPropertyName", "unused")
+@file:Suppress("LocalVariableName", "ObjectPropertyName")
 
 package com.duke.orca.android.kotlin.lockscreencalendar.calendar.repository
 
@@ -11,7 +11,6 @@ import android.database.Cursor
 import android.graphics.Color
 import android.net.Uri
 import android.provider.CalendarContract
-import androidx.activity.result.ActivityResultLauncher
 import androidx.annotation.MainThread
 import androidx.core.database.getIntOrNull
 import androidx.core.database.getLongOrNull
@@ -21,32 +20,24 @@ import androidx.lifecycle.MutableLiveData
 import com.duke.orca.android.kotlin.lockscreencalendar.BLANK
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.DAYS_PER_MONTH
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.DAYS_PER_WEEK
-import com.duke.orca.android.kotlin.lockscreencalendar.calendar.VISIBLE_INSTANCE_COUNT
-import com.duke.orca.android.kotlin.lockscreencalendar.calendar.entity.Entity
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.model.Model
-import com.duke.orca.android.kotlin.lockscreencalendar.calendar.model.Model.CalendarItem
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.util.getFirstDayOfWeekOfMonth
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.util.toDayOfMonth
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.util.toMonth
+import com.duke.orca.android.kotlin.lockscreencalendar.calendar.widget.CalendarView
 import com.duke.orca.android.kotlin.lockscreencalendar.permission.PermissionChecker
 import java.lang.ref.WeakReference
 import java.util.*
 import kotlin.collections.LinkedHashMap
-import android.content.ContentResolver
-import com.duke.orca.android.kotlin.lockscreencalendar.calendar.util.toYear
 import kotlinx.coroutines.*
-
 
 class CalendarRepository(private val applicationContext: Context) {
     private val calendar = Calendar.getInstance()
     private val contentResolver = applicationContext.contentResolver
+
     private val calendarAsyncQueryHandler = CalendarAsyncQueryHandler(WeakReference(this))
-    private val linkedMap = createEmptyLinkedMap()
-
+    private val linkedMap = createLinkedMap()
     private val permissions = listOf(READ_CALENDAR, WRITE_CALENDAR)
-
-    private val job = Job()
-    private val coroutineScope = CoroutineScope(Dispatchers.IO + job)
 
     private object Calendars {
         val projections: Array<String> = arrayOf(
@@ -112,355 +103,50 @@ class CalendarRepository(private val applicationContext: Context) {
         }
     }
 
-    fun getCalendarItems(year: Int, month: Int): LiveData<Array<CalendarItem?>>? {
-        return linkedMap[key(year, month)]
-    }
-
-    fun setCalendarItems(year: Int, month: Int, @MainThread onSet: (liveData: LiveData<Array<CalendarItem?>>?) -> Unit) {
-        linkedMap[key(year, month)] = MutableLiveData()
-        onSet.invoke(linkedMap[key(year, month)])
-    }
-
     fun initialLoad() {
         (-OFFSET..OFFSET).forEach {
             Calendar.getInstance().apply {
                 add(Calendar.MONTH, it)
-            }.also { load(it) }
-        }
-    }
-
-    fun load(year: Int, month: Int) {
-        Calendar.getInstance().apply {
-            set(Calendar.YEAR, year)
-            set(Calendar.MONTH, month)
-        }.also { load(it) }
-    }
-
-    private fun load(calendar: Calendar) {
-        val builder: Uri.Builder = CalendarContract.Instances.CONTENT_URI.buildUpon()
-
-        val year = calendar.get(Calendar.YEAR)
-        val month = calendar.get(Calendar.MONTH)
-        val token = key(year, month)
-
-        val previousMonthCalendar = Calendar.getInstance().apply {
-            set(Calendar.YEAR, year)
-            set(Calendar.MONTH, month)
-            add(Calendar.MONTH, -1)
-        }
-
-        val nextMonthCalendar = Calendar.getInstance().apply {
-            set(Calendar.YEAR, year)
-            set(Calendar.MONTH, month)
-            add(Calendar.MONTH, 1)
-        }
-
-        val indexOfFirstDayOfMonth = getFirstDayOfWeekOfMonth(year, month).dec()
-        val lastDayOfMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
-        val lastDayOfPreviousMonth = previousMonthCalendar.getActualMaximum(Calendar.DAY_OF_MONTH)
-
-        val DTSTART = if (indexOfFirstDayOfMonth == 0) {
-            calendar.apply { set(Calendar.DAY_OF_MONTH, 1) }
-        } else {
-            previousMonthCalendar.apply {
-                set(Calendar.DAY_OF_MONTH, lastDayOfPreviousMonth - indexOfFirstDayOfMonth)
-            }
-        }
-
-        val DTEND = nextMonthCalendar.apply {
-            set(Calendar.DAY_OF_MONTH, DAYS_PER_MONTH - indexOfFirstDayOfMonth - lastDayOfMonth)
-        }
-
-        ContentUris.appendId(builder, DTSTART.timeInMillis)
-        ContentUris.appendId(builder, DTEND.timeInMillis)
-
-        calendarAsyncQueryHandler.startQuery(
-            token,
-            null,
-            builder.build(),
-            Instances.projections,
-            null,
-            null,
-            CalendarContract.Instances.START_DAY + " DESC, " +
-                    CalendarContract.Instances.END_DAY + " DESC, " +
-                    CalendarContract.Instances.BEGIN + " ASC"
-        )
-
-        CalendarContract.Events.MAX_REMINDERS
-    }
-
-    fun clear(year: Int, month: Int) {
-        linkedMap.remove(key(year, month))
-    }
-
-    fun clearCoroutine() {
-        calendarAsyncQueryHandler.clear()
-    }
-
-    class CalendarAsyncQueryHandler(private val weakReference: WeakReference<CalendarRepository>)
-        : AsyncQueryHandler(weakReference.get()?.contentResolver) {
-        private val job = Job()
-        private val coroutineScope = CoroutineScope(Dispatchers.IO + job)
-
-        fun clear() {
-            job.cancel()
-        }
-
-        override fun onQueryComplete(token: Int, cookie: Any?, cursor: Cursor?) {
-            super.onQueryComplete(token, cookie, cursor)
-            cursor ?: return
-
-            val calendarItems = arrayOfNulls<Model.CalendarItem>(DAYS_PER_MONTH)
-            val instances = arrayListOf<Model.Instance>()
-            val month = token % 100
-            val year = token / 100
-
-            val calendar = Calendar.getInstance().apply {
-                set(Calendar.MONTH, month)
-                set(Calendar.YEAR, year)
-            }
-
-            val previousMonthCalendar = Calendar.getInstance().apply {
-                set(Calendar.MONTH, calendar.get(Calendar.MONTH))
-                set(Calendar.YEAR, calendar.get(Calendar.YEAR))
-                add(Calendar.MONTH, -1)
-            }
-
-            val nextMonthCalendar = Calendar.getInstance().apply {
-                set(Calendar.MONTH, calendar.get(Calendar.MONTH))
-                set(Calendar.YEAR, calendar.get(Calendar.YEAR))
-                add(Calendar.MONTH, 1)
-            }
-
-            val previousMonth = previousMonthCalendar.get(Calendar.MONTH)
-            val nextMonth = nextMonthCalendar.get(Calendar.MONTH)
-
-            val indexOfFirstDayOfMonth = getFirstDayOfWeekOfMonth(year, month).dec()
-            val indexOfLastDayOfMonth = indexOfFirstDayOfMonth + calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
-
-            val lastDayOfPreviousMonth = previousMonthCalendar.getActualMaximum(Calendar.DAY_OF_MONTH)
-            val firstVisibleDayOfPreviousMonth = lastDayOfPreviousMonth - indexOfFirstDayOfMonth
-
-            addDaysOfPreviousMonth(calendarItems, lastDayOfPreviousMonth, indexOfFirstDayOfMonth)
-            addDaysOfMonth(calendarItems, indexOfFirstDayOfMonth, indexOfLastDayOfMonth)
-            addDaysOfNextMonth(calendarItems, indexOfLastDayOfMonth)
-
-            //
-            coroutineScope.launch {
-                while (cursor.moveToNext()) {
-                    val _id = cursor.getLongOrNull(Instances.Index._ID) ?: 0L
-                    val allDay = cursor.getIntOrNull(Instances.Index.ALL_DAY) ?: 0
-                    val begin = cursor.getLongOrNull(Instances.Index.BEGIN) ?: 0L
-                    val calendarColor = cursor.getIntOrNull(Instances.Index.CALENDAR_COLOR) ?: Color.TRANSPARENT
-                    val calendarDisplayName = cursor.getStringOrNull(Instances.Index.CALENDAR_DISPLAY_NAME) ?: BLANK
-                    val calendarId = cursor.getLongOrNull(Instances.Index.CALENDAR_ID) ?: continue
-                    val end = cursor.getLongOrNull(Instances.Index.END) ?: 0L
-                    val eventId = cursor.getLongOrNull(Instances.Index.EVENT_ID) ?: continue
-                    val title = cursor.getStringOrNull(Instances.Index.TITLE) ?: BLANK
-
-                    val beginDayOfMonth = begin.toDayOfMonth()
-                    val endDayOfMonth = end.toDayOfMonth()
-                    val fillBackground = allDay == 1 || (endDayOfMonth - beginDayOfMonth > 0)
-
-                    val entity = Entity.Instance(
-                        allDay = allDay == 1,
-                        begin = begin,
-                        calendarColor = calendarColor,
-                        calendarDisplayName = calendarDisplayName,
-                        calendarId = calendarId,
-                        end = end,
-                        eventId = eventId,
-                        id = _id,
-                        month = begin.toMonth(),
-                        title = title
-                    )
-
-                    instances.add(
-                        Model.Instance(
-                            entity = entity,
-                            beginDayOfMonth = beginDayOfMonth,
-                            endDayOfMonth = endDayOfMonth,
-                            duration = endDayOfMonth - beginDayOfMonth,
-                            fillBackground = fillBackground
-                        ))
-                }
-
-                instances.sortWith(Comparator { o1, o2 ->
-                    return@Comparator when {
-                        o1.beginDayOfMonth > o2.beginDayOfMonth -> 1
-                        o1.beginDayOfMonth < o2.beginDayOfMonth -> -1
-                        else -> 0
-                    }
-                })
-
-                instances.forEach { instance ->
-                    val beginDayOfMonth = instance.beginDayOfMonth
-                    val endDayOfMonth = instance.endDayOfMonth
-                    val duration = endDayOfMonth - beginDayOfMonth
-                    val fillBackground = instance.allDay || (duration > 0)
-
-                    val index = when(instance.month) {
-                        previousMonth -> beginDayOfMonth.dec() - firstVisibleDayOfPreviousMonth
-                        nextMonth -> beginDayOfMonth + indexOfLastDayOfMonth.dec()
-                        else -> beginDayOfMonth.dec() + indexOfFirstDayOfMonth
-                    }
-
-                    if (index in 0 until DAYS_PER_MONTH) {
-                        calendarItems[index]?.instances?.add(instance)
-
-                        val k = calendarItems[index]?.instances?.indexOf(instance) ?: NO_INDEX
-
-                        if (k in 0 until VISIBLE_INSTANCE_COUNT) {
-                            calendarItems[index]?.visibleInstances?.let { visibleInstances ->
-                                for (i in 0 until VISIBLE_INSTANCE_COUNT) {
-                                    if (visibleInstances[i] == null) {
-                                        visibleInstances[i] = instance
-                                        break
-                                    }
-                                }
-                            }
-
-                            if (instance.duration > 0) {
-                                for (i in 1..instance.duration) {
-                                    val j = index + i
-
-                                    if (j in 0 until DAYS_PER_MONTH) {
-                                        if (instance.allDay.not()) {
-                                            Model.Instance(
-                                                entity = instance.entity,
-                                                beginDayOfMonth = beginDayOfMonth + i,
-                                                endDayOfMonth = endDayOfMonth,
-                                                duration = endDayOfMonth - (beginDayOfMonth + i),
-                                                fillBackground = fillBackground,
-                                                isVisible = (j % DAYS_PER_WEEK) == Calendar.SUNDAY.dec()
-                                            ).also {
-                                                calendarItems[j]?.instances?.add(it)
-                                                calendarItems[j]?.visibleInstances?.set(k, it)
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
-                withContext(Dispatchers.Main) {
-                    weakReference.get()?.linkedMap?.let { hashMap ->
-                        hashMap[token]?.let {
-                            it.value = calendarItems
-                        } ?: let {
-                            weakReference.get()?.linkedMap?.set(
-                                token,
-                                MutableLiveData(calendarItems)
-                            )
-                        }
-                    }
-                }
-
-                cursor.close()
-            }
-        }
-
-        private fun addDaysOfPreviousMonth(calendarItems: Array<CalendarItem?>, lastDayOfPreviousMonth: Int, indexOfFirstDayOfMonth: Int) {
-            if (indexOfFirstDayOfMonth == 0) {
-                return
-            }
-
-            val from = lastDayOfPreviousMonth - indexOfFirstDayOfMonth.dec()
-
-            for ((i, j) in (from .. lastDayOfPreviousMonth).withIndex()) {
-                calendarItems[i] = Model.CalendarItem.DayOfPreviousMonth(j, position = i)
-            }
-        }
-
-        private fun addDaysOfMonth(calendarItems: Array<CalendarItem?>, indexOfFirstDayOfMonth: Int, indexOfLastDayOfMonth: Int) {
-            for ((i, j) in (indexOfFirstDayOfMonth until indexOfLastDayOfMonth).withIndex()) {
-                calendarItems[j] = CalendarItem.DayOfMonth(i.inc(), position = j)
-            }
-        }
-
-        private fun addDaysOfNextMonth(calendarItems: Array<CalendarItem?>, indexOfLastDayOfMonth: Int) {
-            for ((i, j) in (indexOfLastDayOfMonth until DAYS_PER_MONTH).withIndex()) {
-                calendarItems[j] = CalendarItem.DayOfNextMonth(i.inc(), position = j)
+            }.also {
+                put(it.get(Calendar.YEAR), it.get(Calendar.MONTH))
             }
         }
     }
 
-    private fun permissionsGranted(): Boolean {
-        return PermissionChecker.checkPermissions(applicationContext, permissions)
-    }
-
-    fun calendars(): List<Entity.Calendar> {
-        if (permissionsGranted().not())
-            return emptyList()
-
-        val calendars = mutableListOf<Entity.Calendar>()
-        val contentUri = CalendarContract.Calendars.CONTENT_URI
-        val cursor = contentResolver.query(
-            contentUri,
-            Calendars.projections,
-            null,
-            null,
-            null
-        )
-
-        cursor ?: return emptyList()
-        cursor.moveToFirst()
-
-        while (cursor.moveToNext()) {
-            val _id = cursor.getLong(Calendars.Index._ID)
-            val calendarDisplayName = cursor.getString(Calendars.Index.CALENDAR_DISPLAY_NAME)
-
-            calendars.add(Entity.Calendar(_id, calendarDisplayName))
-        }
-
-        cursor.close()
-
-        return calendars
-    }
-
-    fun events() {
+//    fun getCalendars(): List<Model.Calendar> {
 //        if (permissionsGranted().not())
 //            return emptyList()
-
-        val calendars = mutableListOf<Entity.Calendar>()
-        val contentUri = CalendarContract.Events.CONTENT_URI
-        val cursor = contentResolver.query(
-            contentUri,
-            Events.projections,
-            null,
-            null,
-            null
-        )
-
-        cursor ?: return
-        //cursor ?: return emptyList()
+//
+//        val calendars = mutableListOf<Model.Calendar>()
+//        val contentUri = CalendarContract.Calendars.CONTENT_URI
+//        val cursor = contentResolver.query(
+//            contentUri,
+//            Calendars.projections,
+//            null,
+//            null,
+//            null
+//        )
+//
+//        cursor ?: return emptyList()
 //        cursor.moveToFirst()
 //
 //        while (cursor.moveToNext()) {
-//            val _id = cursor.getLong(Events.Index._ID)
-//            val title = cursor.getString(Events.Index.TITLE)
-//            val DTSTART = cursor.getLong(Events.Index.DTSTART)
+//            val _id = cursor.getLong(Calendars.Index._ID)
+//            val calendarDisplayName = cursor.getString(Calendars.Index.CALENDAR_DISPLAY_NAME)
 //
-//           // calendars.add(Entity.Calendar(_id, calendarDisplayName))
-//            println("events tit: $title, id: ${_id}, DOM ${DTSTART.toDayOfMonth()},, M: ${DTSTART.toMonth()} Y:${DTSTART.toYear()} ")
+//            calendars.add(Model.Calendar(_id, calendarDisplayName))
 //        }
+//
+//        cursor.close()
+//
+//        return calendars
+//    }
 
-        cursor.moveToLast() // 최후의 존재.
-
-        val _id = cursor.getLong(Events.Index._ID)
-
-            val DTSTART = cursor.getLong(Events.Index.DTSTART)
-
-// 더해진놈의 dt로 이동하고. 그 달 리플레시.
-        cursor.close()
+    fun get(year: Int, month: Int): LiveData<Model.Calendar>? {
+        return linkedMap[getKey(year, month)]
     }
 
-    fun instances(year: Int, month: Int, date: Int): List<Model.Instance> {
-        val builder: Uri.Builder = CalendarContract.Instances.CONTENT_URI.buildUpon()
-        val instances = mutableListOf<Model.Instance>()
-
+    fun getInstances(year: Int, month: Int, date: Int): List<Model.Instance> {
         val DTSTART = Calendar.getInstance().apply {
             set(Calendar.YEAR, year)
             set(Calendar.MONTH, month)
@@ -471,10 +157,14 @@ class CalendarRepository(private val applicationContext: Context) {
 
         val DTEND = Calendar.getInstance().apply {
             timeInMillis = DTSTART
-
             set(Calendar.HOUR_OF_DAY, 23)
             set(Calendar.MINUTE, 59)
         }.timeInMillis
+
+        val builder: Uri.Builder = CalendarContract.Instances.CONTENT_URI.buildUpon()
+        val instances = mutableListOf<Model.Instance>()
+//        val string = calendars().map { it.id }.joinToString(separator = ", ") { "\"$it\"" }
+//         val selection = "(${CalendarContract.Instances.CALENDAR_ID} IN ($string))"
 
         ContentUris.appendId(builder, DTSTART)
         ContentUris.appendId(builder, DTEND)
@@ -513,14 +203,12 @@ class CalendarRepository(private val applicationContext: Context) {
                 }.timeInMillis
 
                 if (begin in timeInMillis..DTSTART) {
-                    if (end in DTSTART..DTEND) {
-                        continue
-                    }
+                    if (end in DTSTART..DTEND) continue
                 }
             }
 
-            val entity = Entity.Instance(
-                allDay = allDay == 1,
+            instances.add(Model.Instance(
+                isAllDay = allDay == 1,
                 begin = begin,
                 calendarColor = calendarColor,
                 calendarDisplayName = calendarDisplayName,
@@ -529,15 +217,11 @@ class CalendarRepository(private val applicationContext: Context) {
                 eventId = eventId,
                 id = _id,
                 month = begin.toMonth(),
-                title = title
-            )
-
-            instances.add(Model.Instance(
-                entity = entity,
+                title = title,
                 beginDayOfMonth = beginDayOfMonth,
                 endDayOfMonth = endDayOfMonth,
                 duration = duration,
-                fillBackground = fillBackground
+                fillBackgroundColor = fillBackground
             ))
         }
 
@@ -546,90 +230,300 @@ class CalendarRepository(private val applicationContext: Context) {
         return instances
     }
 
-    fun instances(DTSTART: Calendar, DTEND: Calendar): List<Model.Instance> {
+    fun put(year: Int, month: Int) {
         val builder: Uri.Builder = CalendarContract.Instances.CONTENT_URI.buildUpon()
-        val instances = mutableListOf<Model.Instance>()
-//        val string = calendars().map { it.id }.joinToString(separator = ", ") { "\"$it\"" }
-//        val selection = "(${CalendarContract.Instances.CALENDAR_ID} IN ($string))"
+        val token = getKey(year, month)
+
+        val previousCalendar = Calendar.getInstance().apply {
+            set(Calendar.YEAR, year)
+            set(Calendar.MONTH, month)
+            add(Calendar.MONTH, -1)
+        }
+
+        val nextMonthCalendar = Calendar.getInstance().apply {
+            set(Calendar.YEAR, year)
+            set(Calendar.MONTH, month)
+            add(Calendar.MONTH, 1)
+        }
+
+        val indexOfFirstDayOfMonth = getFirstDayOfWeekOfMonth(year, month).dec()
+        val lastDayOfMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
+        val lastDayOfPreviousMonth = previousCalendar.getActualMaximum(Calendar.DAY_OF_MONTH)
+
+        val DTSTART = if (indexOfFirstDayOfMonth == 0) {
+            calendar.apply { set(Calendar.DAY_OF_MONTH, 1) }
+        } else {
+            previousCalendar.apply {
+                set(Calendar.DAY_OF_MONTH, lastDayOfPreviousMonth - indexOfFirstDayOfMonth)
+            }
+        }
+
+        val DTEND = nextMonthCalendar.apply {
+            set(Calendar.DAY_OF_MONTH, DAYS_PER_MONTH - indexOfFirstDayOfMonth - lastDayOfMonth)
+        }
 
         ContentUris.appendId(builder, DTSTART.timeInMillis)
         ContentUris.appendId(builder, DTEND.timeInMillis)
 
-        if (permissionsGranted().not())
-            return emptyList()
-
-        val cursor = contentResolver.query(
+        calendarAsyncQueryHandler.startQuery(
+            token,
+            null,
             builder.build(),
             Instances.projections,
             null,
             null,
-            CalendarContract.Instances.DTSTART + " ASC"
-        ) ?: return emptyList()
+            CalendarContract.Instances.START_DAY + " DESC, " +
+                    CalendarContract.Instances.END_DAY + " DESC, " +
+                    CalendarContract.Instances.BEGIN + " ASC, " +
+                    CalendarContract.Instances.TITLE + " ASC"
 
-        while (cursor.moveToNext()) {
-            val _id = cursor.getLongOrNull(Instances.Index._ID) ?: 0L
-            val allDay = cursor.getIntOrNull(Instances.Index.ALL_DAY) ?: 0
-            val begin = cursor.getLongOrNull(Instances.Index.BEGIN) ?: 0L
-            val calendarColor = cursor.getIntOrNull(Instances.Index.CALENDAR_COLOR) ?: Color.TRANSPARENT
-            val calendarDisplayName = cursor.getStringOrNull(Instances.Index.CALENDAR_DISPLAY_NAME) ?: BLANK
-            val calendarId = cursor.getLongOrNull(Instances.Index.CALENDAR_ID) ?: continue
-            val end = cursor.getLongOrNull(Instances.Index.END) ?: 0L
-            val eventId = cursor.getLongOrNull(Instances.Index.EVENT_ID) ?: continue
-            val title = cursor.getStringOrNull(Instances.Index.TITLE) ?: BLANK
-
-            val beginDayOfMonth = begin.toDayOfMonth()
-            val endDayOfMonth = end.toDayOfMonth()
-            val duration = endDayOfMonth - beginDayOfMonth
-            val fillBackground = (allDay == 1) || ((endDayOfMonth - beginDayOfMonth) > 0)
-
-            if (allDay == 1) {
-                val timeInMillis = GregorianCalendar.getInstance().apply {
-                    timeInMillis = DTSTART.timeInMillis
-                    add(GregorianCalendar.DATE, -1)
-                }.timeInMillis
-
-                if (timeInMillis <= begin && begin <= DTSTART.timeInMillis) {
-                    if (DTSTART.timeInMillis <= end && end <= DTEND.timeInMillis)
-                        continue
-                }
-            }
-
-            val entity = Entity.Instance(
-                allDay = allDay == 1,
-                begin = begin,
-                calendarColor = calendarColor,
-                calendarDisplayName = calendarDisplayName,
-                calendarId = calendarId,
-                end = end,
-                eventId = eventId,
-                id = _id,
-                month = begin.toMonth(),
-                title = title
-            )
-
-            instances.add(Model.Instance(
-                entity = entity,
-                beginDayOfMonth = beginDayOfMonth,
-                endDayOfMonth = endDayOfMonth,
-                duration = duration,
-                fillBackground = fillBackground
-            ))
-        }
-
-        cursor.close()
-
-        return instances
+        )
     }
 
-    private fun createEmptyLinkedMap(): LinkedHashMap<Int, MutableLiveData<Array<CalendarItem?>>> {
-        val linkedMap = linkedMapOf<Int, MutableLiveData<Array<CalendarItem?>>>()
+    fun put(year: Int, month: Int, @MainThread onPut: (liveData: LiveData<Model.Calendar>?) -> Unit) {
+        linkedMap[getKey(year, month)] = MutableLiveData()
+        put(year, month)
+        onPut.invoke(linkedMap[getKey(year, month)])
+    }
+
+    fun remove(year: Int, month: Int) {
+        linkedMap.remove(getKey(year, month))
+    }
+
+    class CalendarAsyncQueryHandler(private val weakReference: WeakReference<CalendarRepository>)
+        : AsyncQueryHandler(weakReference.get()?.contentResolver) {
+        private val job = Job()
+        private val coroutineScope = CoroutineScope(Dispatchers.IO + job)
+
+        override fun onQueryComplete(token: Int, cookie: Any?, cursor: Cursor?) {
+            super.onQueryComplete(token, cookie, cursor)
+            putCalendar(token, cursor ?: return)
+        }
+
+        private fun putCalendar(token: Int, cursor: Cursor) {
+            coroutineScope.launch {
+                val calendarItems = arrayOfNulls<Model.CalendarItem>(DAYS_PER_MONTH)
+                val instances = arrayListOf<Model.Instance>()
+
+                val year = token / 100
+                val month = token % 100
+
+                val currentCalendar = Calendar.getInstance().apply {
+                    set(Calendar.YEAR, year)
+                    set(Calendar.MONTH, month)
+                }
+
+                val nextCalendar = Calendar.getInstance().apply {
+                    set(Calendar.YEAR, currentCalendar.get(Calendar.YEAR))
+                    set(Calendar.MONTH, currentCalendar.get(Calendar.MONTH))
+                    add(Calendar.MONTH, 1)
+                }
+
+                val previousCalendar = Calendar.getInstance().apply {
+                    set(Calendar.YEAR, currentCalendar.get(Calendar.YEAR))
+                    set(Calendar.MONTH, currentCalendar.get(Calendar.MONTH))
+                    add(Calendar.MONTH, -1)
+                }
+
+                val nextMonth = nextCalendar.get(Calendar.MONTH)
+                val nextYear = nextCalendar.get(Calendar.YEAR)
+                val previousMonth = previousCalendar.get(Calendar.MONTH)
+                val previousYear = previousCalendar.get(Calendar.YEAR)
+
+                val indexOfFirstDayOfMonth = getFirstDayOfWeekOfMonth(year, month).dec()
+                val indexOfLastDayOfMonth = indexOfFirstDayOfMonth + currentCalendar.getActualMaximum(Calendar.DAY_OF_MONTH)
+                val lastDayOfPreviousMonth = previousCalendar.getActualMaximum(Calendar.DAY_OF_MONTH)
+                val firstDayOfPreviousMonth = lastDayOfPreviousMonth - indexOfFirstDayOfMonth
+
+                addDaysOfMonth(calendarItems, indexOfFirstDayOfMonth, indexOfLastDayOfMonth, year, month)
+                addDaysOfNextMonth(calendarItems, indexOfLastDayOfMonth, nextYear, nextMonth)
+                addDaysOfPreviousMonth(calendarItems, lastDayOfPreviousMonth, indexOfFirstDayOfMonth, previousYear, previousMonth)
+
+                while (cursor.moveToNext()) {
+                    if (this.isActive.not()) return@launch
+
+                    val _id = cursor.getLongOrNull(Instances.Index._ID) ?: 0L
+                    val allDay = cursor.getIntOrNull(Instances.Index.ALL_DAY) ?: 0
+                    val begin = cursor.getLongOrNull(Instances.Index.BEGIN) ?: 0L
+                    val calendarColor = cursor.getIntOrNull(Instances.Index.CALENDAR_COLOR) ?: Color.TRANSPARENT
+                    val calendarDisplayName = cursor.getStringOrNull(Instances.Index.CALENDAR_DISPLAY_NAME) ?: BLANK
+                    val calendarId = cursor.getLongOrNull(Instances.Index.CALENDAR_ID) ?: continue
+                    val end = cursor.getLongOrNull(Instances.Index.END) ?: 0L
+                    val eventId = cursor.getLongOrNull(Instances.Index.EVENT_ID) ?: continue
+                    val title = cursor.getStringOrNull(Instances.Index.TITLE) ?: BLANK
+
+                    val beginDayOfMonth = begin.toDayOfMonth()
+                    val endDayOfMonth = end.toDayOfMonth()
+                    val fillBackground = allDay == 1 || (endDayOfMonth - beginDayOfMonth > 0)
+
+                    instances.add(
+                        Model.Instance(
+                            isAllDay = allDay == 1,
+                            begin = begin,
+                            calendarColor = calendarColor,
+                            calendarDisplayName = calendarDisplayName,
+                            calendarId = calendarId,
+                            end = end,
+                            eventId = eventId,
+                            id = _id,
+                            month = begin.toMonth(),
+                            title = title,
+                            beginDayOfMonth = beginDayOfMonth,
+                            endDayOfMonth = endDayOfMonth,
+                            duration = endDayOfMonth - beginDayOfMonth,
+                            fillBackgroundColor = fillBackground
+                        ))
+                }
+
+                instances.sortWith(Comparator { o1, o2 ->
+                    return@Comparator when {
+                        o1.beginDayOfMonth > o2.beginDayOfMonth -> 1
+                        o1.beginDayOfMonth < o2.beginDayOfMonth -> -1
+                        else -> 0
+                    }
+                })
+
+                instances.filterNotNull().forEach { instance ->
+                    val beginDayOfMonth = instance.beginDayOfMonth
+                    var endDayOfMonth = instance.endDayOfMonth
+                    var duration = endDayOfMonth - beginDayOfMonth
+
+                    val index = when(instance.month) {
+                        previousMonth -> beginDayOfMonth.dec() - firstDayOfPreviousMonth
+                        nextMonth -> beginDayOfMonth + indexOfLastDayOfMonth.dec()
+                        else -> beginDayOfMonth.dec() + indexOfFirstDayOfMonth
+                    }
+
+                    if (index in 0 until DAYS_PER_MONTH) {
+                        calendarItems[index]?.instances?.add(instance)
+
+                        val k = calendarItems[index]?.instances?.indexOf(instance) ?: -1
+
+                        if (k in 0 until CalendarView.VISIBLE_INSTANCE_COUNT) {
+                            calendarItems[index]?.visibleInstances?.let { visibleInstances ->
+                                for (i in 0 until CalendarView.VISIBLE_INSTANCE_COUNT) {
+                                    if (visibleInstances[i] == null) {
+                                        visibleInstances[i] = instance
+                                        break
+                                    }
+                                }
+                            }
+
+                            if (instance.duration > 0) {
+                                for (i in 1..instance.duration) {
+                                    val j = index + i
+
+                                    if (j in 0 until DAYS_PER_MONTH) {
+                                        if (instance.isAllDay.not()) {
+                                            instance.deepCopy().apply {
+                                                this.beginDayOfMonth = beginDayOfMonth + i
+                                                this.duration = endDayOfMonth - (beginDayOfMonth + i)
+                                                isVisible = (j % DAYS_PER_WEEK) == Calendar.SUNDAY.dec()
+                                            }.also {
+                                                calendarItems[j]?.instances?.add(it)
+                                                calendarItems[j]?.visibleInstances?.set(k, it)
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                val calendar = Model.Calendar(
+                    year = year,
+                    month = month,
+                    items = calendarItems,
+                    indexOfFirstDayOfMonth,
+                    indexOfLastDayOfMonth,
+                )
+
+                withContext(Dispatchers.Main) {
+                    weakReference.get()?.linkedMap?.let { hashMap ->
+                        hashMap[token]?.let {
+                            it.value = calendar
+                        } ?: let {
+                            weakReference.get()?.linkedMap?.set(
+                                token,
+                                MutableLiveData(calendar)
+                            )
+                        }
+                    }
+                }
+
+                cursor.close()
+            }
+        }
+
+        private fun addDaysOfPreviousMonth(
+            calendarItems: Array<Model.CalendarItem?>,
+            lastDayOfPreviousMonth: Int,
+            indexOfFirstDayOfMonth: Int,
+            year: Int,
+            month: Int
+        ) {
+            if (indexOfFirstDayOfMonth == 0) return
+
+            val from = lastDayOfPreviousMonth - indexOfFirstDayOfMonth.dec()
+
+            for ((i, j) in (from .. lastDayOfPreviousMonth).withIndex()) {
+                calendarItems[i] = Model.CalendarItem.DayOfPreviousMonth(
+                    year = year,
+                    month = month,
+                    date = j,
+                    position = i
+                )
+            }
+        }
+
+        private fun addDaysOfMonth(
+            calendarItems: Array<Model.CalendarItem?>,
+            indexOfFirstDayOfMonth: Int,
+            indexOfLastDayOfMonth: Int,
+            year: Int,
+            month: Int
+        ) {
+            for ((i, j) in (indexOfFirstDayOfMonth until indexOfLastDayOfMonth).withIndex()) {
+                calendarItems[j] = Model.CalendarItem.DayOfMonth(
+                    year = year,
+                    month = month,
+                    date = i.inc(),
+                    position = j
+                )
+            }
+        }
+
+        private fun addDaysOfNextMonth(
+            calendarItems: Array<Model.CalendarItem?>,
+            indexOfLastDayOfMonth: Int,
+            year: Int,
+            month: Int
+        ) {
+            for ((i, j) in (indexOfLastDayOfMonth until DAYS_PER_MONTH).withIndex()) {
+                calendarItems[j] = Model.CalendarItem.DayOfNextMonth(
+                    year = year,
+                    month = month,
+                    i.inc(),
+                    position = j
+                )
+            }
+        }
+    }
+
+    private fun putCalendar(year: Int, month: Int) {
+
+    }
+
+    private fun createLinkedMap(): LinkedHashMap<Int, MutableLiveData<Model.Calendar>> {
+        val linkedMap = linkedMapOf<Int, MutableLiveData<Model.Calendar>>()
         val month = calendar.get(Calendar.MONTH)
 
         for (i in -OFFSET..OFFSET) {
             Calendar.getInstance().apply {
                 add(Calendar.MONTH, i)
             }.also {
-                linkedMap[it.key()] = MutableLiveData<Array<CalendarItem?>>()
+                linkedMap[it.getKey()] = MutableLiveData<Model.Calendar>()
             }
 
             calendar.set(Calendar.MONTH, month)
@@ -638,31 +532,7 @@ class CalendarRepository(private val applicationContext: Context) {
         return linkedMap
     }
 
-    private fun key(year: Int, month: Int) = year * 100 + month
-
-    private fun Calendar.key() = key(get(Calendar.YEAR), get(Calendar.MONTH))
-
-    fun getNewEventId(cr: ContentResolver, cal_uri: Uri?): Long {
-        var local_uri = cal_uri
-        if (cal_uri == null) {
-            //local_uri = Uri.parse(calendar_uri.toString() + "events")
-        }
-        val cursor = cr.query(local_uri!!, arrayOf("MAX(_id) as max_id"), null, null, "_id")
-        cursor!!.moveToFirst()
-        val max_val = cursor.getLong(cursor.getColumnIndex("max_id"))
-        return max_val + 1
-
-        // 라스트 아이디가 변경되었는지 검사하는 식으로..
-        // 이벤트로부터 인스턴스 적출하고..
-//        val projection = arrayOf(CalendarContract.Calendars._ID)
-//        cursor = contentResolver.query(CalendarContract.Events.CONTENT_URI, projection, null, null, null)
-//        if (cursor.moveToLast()) {
-//            val lastId = cursor.getLong(0)
-//            // compare lastId with a previous one, if not changed - result is CANCELLED
-//        }
-    }
-
-    fun lastEvent(): Entity.Event? {
+    fun getLastEvent(): Model.Event? {
         val contentUri = CalendarContract.Events.CONTENT_URI
         val cursor = contentResolver.query(
             contentUri,
@@ -680,22 +550,21 @@ class CalendarRepository(private val applicationContext: Context) {
 
         cursor.close()
 
-        return Entity.Event(
+        return Model.Event(
             id = _id,
             DTSTART = DTSTART
         )
     }
 
+    private fun permissionsGranted(): Boolean {
+        return PermissionChecker.checkPermissions(applicationContext, permissions)
+    }
+
+    private fun Calendar.getKey() = getKey(get(Calendar.YEAR), get(Calendar.MONTH))
+
+    private fun getKey(year: Int, month: Int) = year * 100 + month
+
     companion object {
-        private const val NO_INDEX = -1
-        private const val OFFSET = 12
-
-        fun edit(activityResultLauncher: ActivityResultLauncher<Model.Instance>, instance: Model.Instance) {
-            activityResultLauncher.launch(instance)
-        }
-
-        fun insert(activityResultLauncher: ActivityResultLauncher<Model.Instance>) {
-            activityResultLauncher.launch(null)
-        }
+        const val OFFSET = 3
     }
 }

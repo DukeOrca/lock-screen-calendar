@@ -15,7 +15,7 @@ import com.duke.orca.android.kotlin.lockscreencalendar.calendar.widget.CalendarI
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.widget.CalendarItemView.Margin.CALENDAR_COLOR_END
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.widget.CalendarItemView.Margin.CALENDAR_COLOR_START
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.widget.CalendarItemView.Margin.DATE_TOP
-import com.duke.orca.android.kotlin.lockscreencalendar.calendar.widget.CalendarItemView.Margin.DAY_OF_MONTH_BOTTOM
+import com.duke.orca.android.kotlin.lockscreencalendar.calendar.widget.CalendarItemView.Margin.DATE_BOTTOM
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.widget.CalendarItemView.Margin.DATE_START
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.widget.CalendarItemView.Margin.INSTANCE_BOTTOM
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.widget.CalendarItemView.Margin.INSTANCE_END
@@ -25,28 +25,27 @@ import com.duke.orca.android.kotlin.lockscreencalendar.calendar.widget.CalendarI
 import com.duke.orca.android.kotlin.lockscreencalendar.color.ColorCalculator
 import com.duke.orca.android.kotlin.lockscreencalendar.util.toPx
 import java.util.*
-import kotlin.math.abs
 
 class CalendarItemView : View {
     private object Height {
-        const val INSTANCE = 11
+        const val INSTANCE = 10
     }
 
     private object Margin {
         const val CALENDAR_COLOR_END = 1
         const val CALENDAR_COLOR_START = 1
+        const val DATE_BOTTOM = 6F
         const val DATE_START = 2F
-        const val DAY_OF_MONTH_BOTTOM = 8F
         const val DATE_TOP = 4F
         const val INSTANCE_BOTTOM = 2
         const val INSTANCE_END = 2
         const val INSTANCE_START_LARGE = 4F
-        const val INSTANCE_START_SMALL = 1F
+        const val INSTANCE_START_SMALL = 2F
     }
 
     private object TextSize {
-        const val DAY_OF_MONTH = 12F
-        const val INSTANCE = 10F
+        const val DATE = 11F
+        const val INSTANCE = 9F
         const val INVISIBLE_INSTANCE_COUNT = 8F
     }
 
@@ -56,7 +55,6 @@ class CalendarItemView : View {
 
     private var item: CalendarItem? = null
     private val bounds = Rect()
-    private val bound2 = Rect()
 
     private lateinit var dateTextPaint: TextPaint
     private lateinit var instanceTextPaint: TextPaint
@@ -72,7 +70,7 @@ class CalendarItemView : View {
 
         dateTextPaint = TextPaint().apply {
             isAntiAlias = true
-            textSize = TextSize.DAY_OF_MONTH.toPx
+            textSize = TextSize.DATE.toPx
             color = when(dayOfWeek) {
                 Calendar.SATURDAY.dec() -> ContextCompat.getColor(context, R.color.light_blue_400)
                 Calendar.SUNDAY.dec() -> ContextCompat.getColor(context, R.color.red_400)
@@ -113,13 +111,14 @@ class CalendarItemView : View {
             instanceTextPaint.alpha = ALPHA
         }
 
-        dateTextPaint.getTextBounds(text, 0, text.length, bounds)
-
-        currentX += bounds.height().toFloat()
+        with(bounds) {
+            dateTextPaint.getTextBounds(text, 0, text.length, this)
+            currentX += height().toFloat()
+        }
 
         canvas.drawText(text, DATE_START.toPx, currentX, dateTextPaint)
 
-        currentX += DAY_OF_MONTH_BOTTOM.toPx
+        currentX += DATE_BOTTOM.toPx
 
         item.visibleInstances.forEachIndexed { index, instance ->
             if (index > VISIBLE_INSTANCE_COUNT) {
@@ -129,7 +128,7 @@ class CalendarItemView : View {
             bounds.set(0, 0, width, INSTANCE.toPx)
 
             instance?.let {
-                val right = this.width * it.columnCount() - CALENDAR_COLOR_END.toPx
+                val right = this.width * it.getColumnCount() - CALENDAR_COLOR_END.toPx
 
                 canvas.save()
                 canvas.clipRect(0, 0, right, this.height)
@@ -157,7 +156,7 @@ class CalendarItemView : View {
                 if (it.isVisible) {
                     val bottom = currentX.toInt() + bounds.height()
 
-                    if (instance.fillBackground) {
+                    if (instance.fillBackgroundColor) {
                         canvas.drawRect(calendarColorRect.apply {
                             set(CALENDAR_COLOR_START.toPx, currentX.toInt(), right, bottom)
                         }, calendarColorPaint)
@@ -168,17 +167,20 @@ class CalendarItemView : View {
                     }
                 }
 
-                val x = if (it.fillBackground)
+                val x = if (it.fillBackgroundColor)
                     INSTANCE_START_SMALL.toPx
                 else
                     INSTANCE_START_LARGE.toPx
 
-                val fm: Paint.FontMetrics = instanceTextPaint.getFontMetrics()
-                val height22 = fm.descent - fm.ascent
+                val fondHeight = instanceTextPaint.fontMetrics.run {
+                    descent - ascent
+                }
 
-                instanceTextPaint.getTextBounds(title, 0, title.length, bound2)
+                var bm = fondHeight - bounds.height()
 
-                val bm = abs(bounds.height() - height22)
+                if (bm < 0F) {
+                    bm = 0F
+                }
 
                 canvas.drawText(
                     title,

@@ -58,8 +58,8 @@
 31-->/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/src/main/AndroidManifest.xml:21:9-56
 32        <activity
 32-->/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/src/main/AndroidManifest.xml:23:9-31:20
-33            android:name="com.duke.orca.android.kotlin.lockscreencalendar.main.view.MainActivity"
-33-->/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/src/main/AndroidManifest.xml:24:13-51
+33            android:name="com.duke.orca.android.kotlin.lockscreencalendar.main.views.MainActivity"
+33-->/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/src/main/AndroidManifest.xml:24:13-52
 34            android:exported="true" >
 34-->/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/src/main/AndroidManifest.xml:25:13-36
 35            <intent-filter>

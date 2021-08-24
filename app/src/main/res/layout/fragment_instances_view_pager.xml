@@ -17,7 +17,7 @@
         android:layout_height="@dimen/height_360dp"
         android:clipChildren="false"
         android:clipToPadding="false"
-        android:paddingEnd="@dimen/padding_64dp"
-        android:paddingStart="@dimen/padding_64dp"/>
+        android:paddingEnd="@dimen/padding_24dp"
+        android:paddingStart="@dimen/padding_24dp"/>
 
 </LinearLayout>

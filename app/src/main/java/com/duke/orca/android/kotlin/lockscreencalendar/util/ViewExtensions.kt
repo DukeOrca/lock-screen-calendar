@@ -31,20 +31,20 @@ fun FrameLayout.animateRipple() {
     }
 }
 
-fun FrameLayout.ripple(show: Boolean) {
-    if (show) {
-        if (foreground is RippleDrawable) {
-            val rippleDrawable = foreground
+fun FrameLayout.hideRipple() {
+    if (foreground is RippleDrawable) {
+        foreground.state = intArrayOf()
+    }
+}
 
-            rippleDrawable.state = intArrayOf(
-                android.R.attr.state_pressed,
-                android.R.attr.state_enabled
-            )
-        }
-    } else {
-        if (foreground is RippleDrawable) {
-            foreground.state = intArrayOf()
-        }
+fun FrameLayout.showRipple() {
+    if (foreground is RippleDrawable) {
+        val rippleDrawable = foreground
+
+        rippleDrawable.state = intArrayOf(
+            android.R.attr.state_pressed,
+            android.R.attr.state_enabled
+        )
     }
 }
 

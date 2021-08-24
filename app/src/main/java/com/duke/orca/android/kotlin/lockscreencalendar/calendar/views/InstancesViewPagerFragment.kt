@@ -8,16 +8,16 @@ import androidx.fragment.app.activityViewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.duke.orca.android.kotlin.lockscreencalendar.PACKAGE_NAME
 import com.duke.orca.android.kotlin.lockscreencalendar.base.BaseFragment
-import com.duke.orca.android.kotlin.lockscreencalendar.calendar.adapter.CalendarViewAdapter
+import com.duke.orca.android.kotlin.lockscreencalendar.calendar.TRANSITION_NAME
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.adapter.InstancesViewAdapter
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.adapter.InstancesViewAdapter.Companion.START_POSITION
-import com.duke.orca.android.kotlin.lockscreencalendar.calendar.transformer.ZoomOutPageTransformer
+import com.duke.orca.android.kotlin.lockscreencalendar.calendar.pagetransformer.PageTransformer
 import com.duke.orca.android.kotlin.lockscreencalendar.databinding.FragmentInstancesViewPagerBinding
 import com.duke.orca.android.kotlin.lockscreencalendar.main.viewmodel.MainViewModel
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-class InstancesViewPagerDialogFragment : BaseFragment<FragmentInstancesViewPagerBinding>() {
+class InstancesViewPagerFragment : BaseFragment<FragmentInstancesViewPagerBinding>() {
     override fun inflate(
         inflater: LayoutInflater,
         container: ViewGroup?
@@ -26,6 +26,8 @@ class InstancesViewPagerDialogFragment : BaseFragment<FragmentInstancesViewPager
     }
 
     object Key {
+        private const val PREFIX = "$PACKAGE_NAME.calendar.views" +
+                ".InstancesViewPagerFragment.Key.PREFIX"
         const val YEAR = "$PREFIX.Key.YEAR"
         const val MONTH = "$PREFIX.Key.MONTH"
         const val DATE = "$PREFIX.Key.DATE"
@@ -33,18 +35,20 @@ class InstancesViewPagerDialogFragment : BaseFragment<FragmentInstancesViewPager
 
     private val viewModel by activityViewModels<MainViewModel>()
 
-    private val adapter by lazy { InstancesViewAdapter(requireActivity()) }
+    private val adapter by lazy { InstancesViewAdapter(this) }
     private val calendar = Calendar.getInstance()
-    private val offscreenPageLimit = 6
+    private val offscreenPageLimit = 1
 
     private val onPageChangeCallback by lazy {
         object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-                val amount = position - CalendarViewAdapter.START_POSITION
+                val amount = position - START_POSITION
                 val calendar = Calendar.getInstance().apply {
                     add(Calendar.DATE, amount)
                 }
+
+                viewModel.selectDate(calendar)
             }
         }
     }
@@ -65,11 +69,17 @@ class InstancesViewPagerDialogFragment : BaseFragment<FragmentInstancesViewPager
         return viewBinding.root
     }
 
+    override fun onDestroyView() {
+        viewBinding.viewPager2.adapter = null
+        super.onDestroyView()
+    }
+
     private fun initializeViews() {
+        viewBinding.viewPager2.transitionName = TRANSITION_NAME
         viewBinding.viewPager2.adapter = adapter
-        viewBinding.viewPager2.offscreenPageLimit = 3
+        viewBinding.viewPager2.offscreenPageLimit = offscreenPageLimit
         viewBinding.viewPager2.registerOnPageChangeCallback(onPageChangeCallback)
-        viewBinding.viewPager2.setPageTransformer(ZoomOutPageTransformer())
+        viewBinding.viewPager2.setPageTransformer(PageTransformer())
     }
 
     private fun startPosition(year: Int, month: Int, date: Int): Int {
@@ -86,23 +96,14 @@ class InstancesViewPagerDialogFragment : BaseFragment<FragmentInstancesViewPager
             set(Calendar.MINUTE, 0)
         }
 
-        val year1 = calendar.get(Calendar.YEAR)
-        val month1 = calendar.get(Calendar.MONTH) // current year, month.
-        val date1 = calendar.get(Calendar.DATE)
-
-        val year2 = to.get(Calendar.YEAR)
-        val month2 = to.get(Calendar.MONTH)
-        val date2 = to.get(Calendar.DATE)
-
         val diff = calendar.timeInMillis - to.timeInMillis
+        val addVal = if (diff <  0)
+            0
+        else
+            -1
         //TimeUnit.MILLISECONDS.toDays(millionSeconds)
+        val ret = START_POSITION - TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS).toInt()
 
-        return START_POSITION - TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS).toInt()
-    }
-
-    companion object {
-        private const val PREFIX = "$PACKAGE_NAME.calendar.views.InstancesViewPagerDialogFragment" +
-                ".companion.PREFIX"
-        private const val OFFSCREEN_PAGE_LIMIT = 6
+        return ret + addVal
     }
 }

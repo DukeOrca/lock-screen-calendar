@@ -21,7 +21,7 @@
         android:theme="@style/Theme.LockScreenCalendar"
         tools:ignore="AllowBackup">
         <activity
-            android:name=".main.view.MainActivity"
+            android:name=".main.views.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

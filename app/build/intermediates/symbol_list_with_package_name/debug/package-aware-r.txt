@@ -1459,6 +1459,7 @@ dimen compat_control_corner_material
 dimen compat_notification_large_icon_max_height
 dimen compat_notification_large_icon_max_width
 dimen default_dimension
+dimen default_rounded_corner
 dimen design_appbar_elevation
 dimen design_bottom_navigation_active_item_max_width
 dimen design_bottom_navigation_active_item_min_width
@@ -1586,6 +1587,7 @@ dimen leak_canary_toast_icon_size
 dimen leak_canary_toast_icon_tv_padding
 dimen margin_12dp
 dimen margin_16dp
+dimen margin_192dp
 dimen margin_20dp
 dimen margin_24dp
 dimen margin_28dp
@@ -2021,6 +2023,7 @@ drawable abc_textfield_search_material
 drawable abc_vector_test
 drawable avd_hide_password
 drawable avd_show_password
+drawable background_blind_screen
 drawable background_calendar_color
 drawable background_calendar_view_item_selected
 drawable btn_checkbox_checked_mtrl
@@ -2093,6 +2096,7 @@ drawable notification_template_icon_bg
 drawable notification_template_icon_low_bg
 drawable notification_tile_bg
 drawable notify_panel_notification_icon_bg
+drawable rounded_corners
 drawable test_custom_background
 drawable tooltip_frame_dark
 drawable tooltip_frame_light
@@ -2326,6 +2330,7 @@ id jumpToEnd
 id jumpToStart
 id labeled
 id layout
+id layout_day_of_week
 id leak_canary_about_heap_dump_switch_button
 id leak_canary_about_heap_dump_text
 id leak_canary_about_text
@@ -2374,7 +2379,6 @@ id line1
 id line3
 id linear
 id linear_layout_insert
-id linear_layout_instance
 id listMode
 id list_item
 id masked
@@ -2575,15 +2579,20 @@ id text_input_start_icon
 id text_view_allow
 id text_view_begin
 id text_view_date
-id text_view_day_of_month
 id text_view_day_of_week
 id text_view_deny
 id text_view_end
-id text_view_instance
+id text_view_friday
+id text_view_monday
 id text_view_month
 id text_view_permission
 id text_view_permission_rationale
+id text_view_saturday
+id text_view_sunday
+id text_view_thursday
 id text_view_title
+id text_view_tuesday
+id text_view_wednesday
 id text_view_year
 id textinput_counter
 id textinput_error
@@ -2702,7 +2711,7 @@ layout abc_search_view
 layout abc_select_dialog_material
 layout abc_tooltip
 layout activity_main
-layout calendar_item_view
+layout blind_screen
 layout custom_dialog
 layout day_of_week
 layout design_bottom_navigation_item
@@ -2723,8 +2732,8 @@ layout design_text_input_start_icon
 layout fragment_calendar_view
 layout fragment_instances_view
 layout fragment_instances_view_pager
+layout fragment_main
 layout fragment_permission_dialog
-layout instance
 layout instance_item_view
 layout leak_canary_about_screen
 layout leak_canary_heap_analysis_failure_screen
@@ -2870,6 +2879,7 @@ string error_icon_content_description
 string exposed_dropdown_menu_content_description
 string fab_transformation_scrim_behavior
 string fab_transformation_sheet_behavior
+string friday
 string hide_bottom_view_on_scroll_behavior
 string icon_content_description
 string item_view_role_description
@@ -2962,6 +2972,7 @@ string material_timepicker_minute
 string material_timepicker_pm
 string material_timepicker_select_time
 string material_timepicker_text_input_mode_description
+string monday
 string mtrl_badge_numberless_content_description
 string mtrl_chip_close_icon_content_description
 string mtrl_exceed_max_badge_number_content_description
@@ -3004,8 +3015,13 @@ string path_password_eye_mask_visible
 string path_password_strike_through
 string permission_rationale
 string request_app_permissions
+string saturday
 string search_menu_title
 string status_bar_notification_info_overflow
+string sunday
+string thursday
+string tuesday
+string wednesday
 string year
 style AlertDialog_AppCompat
 style AlertDialog_AppCompat_Light

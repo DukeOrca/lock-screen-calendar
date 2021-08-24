@@ -30,7 +30,7 @@
         android:testOnly="true"
         android:theme="@style/Theme.LockScreenCalendar" >
         <activity
-            android:name="com.duke.orca.android.kotlin.lockscreencalendar.main.view.MainActivity"
+            android:name="com.duke.orca.android.kotlin.lockscreencalendar.main.views.MainActivity"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

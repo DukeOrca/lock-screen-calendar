@@ -30,6 +30,9 @@ public final class ActivityMainBinding implements ViewBinding {
   public final FrameLayout frameLayout;
 
   @NonNull
+  public final DayOfWeekBinding layoutDayOfWeek;
+
+  @NonNull
   public final LinearLayout linearLayoutInsert;
 
   @NonNull
@@ -43,11 +46,13 @@ public final class ActivityMainBinding implements ViewBinding {
 
   private ActivityMainBinding(@NonNull ConstraintLayout rootView,
       @NonNull FragmentContainerView fragmentContainerView, @NonNull FrameLayout frameLayout,
-      @NonNull LinearLayout linearLayoutInsert, @NonNull TextView textViewMonth,
-      @NonNull TextView textViewYear, @NonNull ViewPager2 viewPager2) {
+      @NonNull DayOfWeekBinding layoutDayOfWeek, @NonNull LinearLayout linearLayoutInsert,
+      @NonNull TextView textViewMonth, @NonNull TextView textViewYear,
+      @NonNull ViewPager2 viewPager2) {
     this.rootView = rootView;
     this.fragmentContainerView = fragmentContainerView;
     this.frameLayout = frameLayout;
+    this.layoutDayOfWeek = layoutDayOfWeek;
     this.linearLayoutInsert = linearLayoutInsert;
     this.textViewMonth = textViewMonth;
     this.textViewYear = textViewYear;
@@ -93,6 +98,13 @@ public final class ActivityMainBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.layout_day_of_week;
+      View layoutDayOfWeek = ViewBindings.findChildViewById(rootView, id);
+      if (layoutDayOfWeek == null) {
+        break missingId;
+      }
+      DayOfWeekBinding binding_layoutDayOfWeek = DayOfWeekBinding.bind(layoutDayOfWeek);
+
       id = R.id.linear_layout_insert;
       LinearLayout linearLayoutInsert = ViewBindings.findChildViewById(rootView, id);
       if (linearLayoutInsert == null) {
@@ -118,7 +130,8 @@ public final class ActivityMainBinding implements ViewBinding {
       }
 
       return new ActivityMainBinding((ConstraintLayout) rootView, fragmentContainerView,
-          frameLayout, linearLayoutInsert, textViewMonth, textViewYear, viewPager2);
+          frameLayout, binding_layoutDayOfWeek, linearLayoutInsert, textViewMonth, textViewYear,
+          viewPager2);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

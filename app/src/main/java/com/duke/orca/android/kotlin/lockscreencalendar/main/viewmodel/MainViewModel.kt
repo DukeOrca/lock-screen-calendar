@@ -5,31 +5,40 @@ import android.content.Intent
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.duke.orca.android.kotlin.lockscreencalendar.calendar.entity.Entity
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.model.Model
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.repository.CalendarRepository
+import com.duke.orca.android.kotlin.lockscreencalendar.calendar.widget.CalendarView
 import com.duke.orca.android.kotlin.lockscreencalendar.util.SingleLiveEvent
 import java.util.*
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
-    val refresh = MutableLiveData<Unit>()
+    val repository = CalendarRepository(application.applicationContext)
+
+    private var _refresh = MutableLiveData<Unit>()
+    val refresh: LiveData<Unit>
+        get() = _refresh
 
     fun refresh() {
-        refresh.value = Unit
+        _refresh.value = Unit
     }
 
-    val calendarRepository = CalendarRepository(application.applicationContext)
+    private var _selectedDate = MutableLiveData<Calendar>()
+    val selectedDate: LiveData<Calendar>
+        get() = _selectedDate
 
-    private val _showEvents = SingleLiveEvent<Calendar>()
-    val showEvents: LiveData<Calendar>
+    fun selectDate(value: Calendar) {
+        _selectedDate.value = value
+    }
+
+    private val _showEvents = SingleLiveEvent<CalendarView.ViewHolder>()
+    val showEvents: LiveData<CalendarView.ViewHolder>
         get() = _showEvents
-    fun callShowEvents(calendar: Calendar) {
+
+    fun callShowEvents(calendar: CalendarView.ViewHolder) {
         _showEvents.value = calendar
     }
 
-    var lastEvent: Entity.Event? = null
-
-    // 캘린더 뷰모델 적출필요
+    var lastEvent: Model.Event? = null
     var selectedItem: Model.CalendarItem? = null
 
     private val _intent = SingleLiveEvent<Intent>()
@@ -41,12 +50,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun load() {
-        calendarRepository.initialLoad()
+        repository.initialLoad()
     }
 }
-
-data class Date(
-    val year: Int,
-    val month: Int,
-    val date: Int
-)

@@ -1,4 +1,4 @@
-package com.duke.orca.android.kotlin.lockscreencalendar.main.view
+package com.duke.orca.android.kotlin.lockscreencalendar.main.views
 
 import android.content.Intent
 import android.os.Bundle
@@ -10,10 +10,11 @@ import androidx.viewpager2.widget.ViewPager2
 import com.duke.orca.android.kotlin.lockscreencalendar.PACKAGE_NAME
 import com.duke.orca.android.kotlin.lockscreencalendar.R
 import com.duke.orca.android.kotlin.lockscreencalendar.base.BaseActivity
+import com.duke.orca.android.kotlin.lockscreencalendar.calendar.TRANSITION_NAME
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.adapter.CalendarViewAdapter
-import com.duke.orca.android.kotlin.lockscreencalendar.calendar.views.InstancesViewPagerDialogFragment
+import com.duke.orca.android.kotlin.lockscreencalendar.calendar.views.InstancesViewPagerFragment
 import com.duke.orca.android.kotlin.lockscreencalendar.databinding.ActivityMainBinding
-import com.duke.orca.android.kotlin.lockscreencalendar.main.view.MainActivity.ActivityResultLauncher.KEY_PERMISSION
+import com.duke.orca.android.kotlin.lockscreencalendar.main.views.MainActivity.ActivityResultLauncher.KEY_PERMISSION
 import com.duke.orca.android.kotlin.lockscreencalendar.main.viewmodel.MainViewModel
 import com.duke.orca.android.kotlin.lockscreencalendar.permission.PermissionChecker
 import com.duke.orca.android.kotlin.lockscreencalendar.permission.view.PermissionRationaleDialogFragment
@@ -33,6 +34,12 @@ class MainActivity : BaseActivity(), PermissionRationaleDialogFragment.OnPermiss
         const val KEY_PERMISSION = "$PREFIX.KEY_PERMISSION"
     }
 
+    private object Today {
+        var year = 0
+        var month = 0
+        var date = 0
+    }
+
     private val adapter by lazy { CalendarViewAdapter(this) }
     private val months by lazy { resources.getStringArray(R.array.months) }
     private val offscreenPageLimit = 6
@@ -42,7 +49,7 @@ class MainActivity : BaseActivity(), PermissionRationaleDialogFragment.OnPermiss
 
     private val activityResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         viewModel.lastEvent?.let {
-            val lastEvent = viewModel.calendarRepository.lastEvent() ?: return@let
+            val lastEvent = viewModel.repository.getLastEvent() ?: return@let
 
             if (it.id < lastEvent.id) {
                 //새 인스턴스 추가됨. dtstart 로 해당 month 로 이동 후. 리플래시.
@@ -54,14 +61,14 @@ class MainActivity : BaseActivity(), PermissionRationaleDialogFragment.OnPermiss
                     val month = get(Calendar.MONTH)
                     val date = get(Calendar.DATE)
 
-                    moveTo(year, month)
+                    scrollTo(year, month, true, false)
                 }
             }
         }
     }
 
     private val activityResultLauncher2 = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-        viewModel.refresh.value = Unit
+        viewModel.refresh()
     }
 
     private val onPageChangeCallback by lazy {
@@ -95,8 +102,9 @@ class MainActivity : BaseActivity(), PermissionRationaleDialogFragment.OnPermiss
 //            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
 //        )
 
+        initData()
         initializeViews()
-        registerObservers()
+        observe()
         initializeActivityResultLaunchers()
 
         if (PermissionRationaleDialogFragment.permissionsGranted(this).not()) {
@@ -138,6 +146,14 @@ class MainActivity : BaseActivity(), PermissionRationaleDialogFragment.OnPermiss
         )
     }
 
+    private fun initData() {
+        with(Calendar.getInstance()) {
+            Today.year = get(Calendar.YEAR)
+            Today.month = get(Calendar.MONTH)
+            Today.date = get(Calendar.DATE)
+        }
+    }
+
     private fun initializeActivityResultLaunchers() {
         putActivityResultLauncher(
             KEY_PERMISSION,
@@ -162,23 +178,29 @@ class MainActivity : BaseActivity(), PermissionRationaleDialogFragment.OnPermiss
         }
     }
 
-    private fun registerObservers() {
-        viewModel.refresh.observe(this, {
-            viewBinding.viewPager2.adapter = adapter
-            viewBinding.viewPager2.setCurrentItem(CalendarViewAdapter.START_POSITION, false)
-        })
+    private fun observe() {
+//        viewModel.refresh.observe(this, {
+        // 필요한가? 얘 때문인거 같기도한데?
+//            viewBinding.viewPager2.adapter = adapter
+//            viewBinding.viewPager2.setCurrentItem(CalendarViewAdapter.START_POSITION, false)
+//        })
 
-        viewModel.showEvents.observe(this, { calendar ->
-            InstancesViewPagerDialogFragment().also {
+        viewModel.showEvents.observe(this, { viewHolder ->
+            val calendarItem = viewHolder.calendarItem
+            InstancesViewPagerFragment().also {
                 val arguments = Bundle().apply {
-                    putInt(InstancesViewPagerDialogFragment.Key.YEAR, calendar.get(Calendar.YEAR))
-                    putInt(InstancesViewPagerDialogFragment.Key.MONTH, calendar.get(Calendar.MONTH))
-                    putInt(InstancesViewPagerDialogFragment.Key.DATE, calendar.get(Calendar.DATE))
+                    putInt(InstancesViewPagerFragment.Key.YEAR, calendarItem.year)
+                    putInt(InstancesViewPagerFragment.Key.MONTH, calendarItem.month)
+                    putInt(InstancesViewPagerFragment.Key.DATE, calendarItem.date)
                 }
 
                 it.arguments = arguments
 
+                val calendarView = viewHolder.calendarView
+                calendarView.transitionName = TRANSITION_NAME
+
                 supportFragmentManager.beginTransaction()
+                    .addSharedElement(calendarView, TRANSITION_NAME)
                     .add(R.id.fragment_container_view, it, it.tag)
                     .addToBackStack(null)
                     .commit()
@@ -193,10 +215,16 @@ class MainActivity : BaseActivity(), PermissionRationaleDialogFragment.OnPermiss
                 Intent.ACTION_INSERT -> {}
             }
         })
+
+        viewModel.selectedDate.observe(this, {
+            val year = it.get(Calendar.YEAR)
+            val month = it.get(Calendar.MONTH)
+            scrollTo(year, month, smoothScroll = true)
+        })
     }
 
     private fun insertEvent(year: Int, month: Int, date: Int) {
-        viewModel.lastEvent = viewModel.calendarRepository.lastEvent()
+        viewModel.lastEvent = viewModel.repository.getLastEvent()
 
         val eventBeginTime = Calendar.getInstance().apply {
             set(Calendar.YEAR, year)
@@ -220,31 +248,30 @@ class MainActivity : BaseActivity(), PermissionRationaleDialogFragment.OnPermiss
         activityResultLauncher.launch(intent)
     }
 
-    private fun moveTo(year: Int, month: Int, refresh: Boolean = false) {
+    private fun scrollTo(year: Int, month: Int, reload: Boolean = false, smoothScroll: Boolean = false) {
+        val currentItem = viewBinding.viewPager2.currentItem
+
+        val from = Calendar.getInstance().apply {
+            add(Calendar.MONTH, currentItem - CalendarViewAdapter.START_POSITION)
+        }
+
         val to = Calendar.getInstance().apply {
             set(Calendar.YEAR, year)
             set(Calendar.MONTH, month)
         }
 
-        val currentItem = viewBinding.viewPager2.currentItem
-        val amount = currentItem - CalendarViewAdapter.START_POSITION // 8월로부터 얼마나 떨어져있는가..
+        val fromYear = from.get(Calendar.YEAR)
+        val fromMonth = from.get(Calendar.MONTH)
 
-        val calendar = Calendar.getInstance().apply {
-            add(Calendar.MONTH, amount)
+        val toYear = to.get(Calendar.YEAR)
+        val toMonth = to.get(Calendar.MONTH)
+
+       val amount = toMonth - fromMonth + (toYear - fromYear) * 12
+
+        viewBinding.viewPager2.setCurrentItem(currentItem + amount, smoothScroll)
+
+        if (reload) {
+            viewModel.repository.put(year, month)
         }
-
-        val year1 = calendar.get(Calendar.YEAR)
-        val month1 = calendar.get(Calendar.MONTH) // current year, month.
-
-        val year2 = to.get(Calendar.YEAR)
-        val month2 = to.get(Calendar.MONTH)
-
-        val dY = year2 - year1
-        var dM = month2 - month1
-
-        dM += dY * 12
-
-        viewBinding.viewPager2.setCurrentItem(currentItem + dM, false)
-        viewModel.calendarRepository.load(year, month)
     }
 }

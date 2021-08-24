@@ -47,7 +47,7 @@ class InstanceAdapter : ListAdapter<Instance, InstanceAdapter.ViewHolder>(DiffCa
 
 class DiffCallback: DiffUtil.ItemCallback<Instance>() {
     override fun areItemsTheSame(oldItem: Instance, newItem: Instance): Boolean {
-        return oldItem.entity.id == newItem.entity.id
+        return oldItem.id == newItem.id
     }
 
     override fun areContentsTheSame(oldItem: Instance, newItem: Instance): Boolean {
