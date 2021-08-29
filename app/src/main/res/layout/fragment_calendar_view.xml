@@ -17,7 +17,7 @@
         android:paddingEnd="@dimen/margin_4dp"
         android:paddingStart="@dimen/margin_4dp"
         android:visibility="visible"
-        app:itemHeight="@dimen/height_72dp"
+        app:itemHeight="@dimen/height_60dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

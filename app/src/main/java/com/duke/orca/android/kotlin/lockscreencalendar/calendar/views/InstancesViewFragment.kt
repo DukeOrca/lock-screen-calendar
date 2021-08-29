@@ -68,23 +68,13 @@ class InstancesViewFragment : BaseFragment<FragmentInstancesViewBinding>() {
             setHasFixedSize(true)
         }
 
-        lifecycleScope.launch(Dispatchers.IO) {
-            val list = viewModel.repository.getInstances(year, month, date)
-
-            withContext(Dispatchers.Main) {
-                adapter.submitList(list)
-            }
-        }
+        adapter.submitList(viewModel.repository.getInstances(year, month, date))
 
         viewModel.refresh.observe(viewLifecycleOwner, {
             loadInstances(year, month, date)
         })
 
         return viewBinding.root
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
     }
 
     private fun loadInstances(year: Int, month: Int, date: Int) {

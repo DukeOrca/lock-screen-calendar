@@ -37,7 +37,7 @@ class InstancesViewPagerFragment : BaseFragment<FragmentInstancesViewPagerBindin
 
     private val adapter by lazy { InstancesViewAdapter(this) }
     private val calendar = Calendar.getInstance()
-    private val offscreenPageLimit = 1
+    private val offscreenPageLimit = 3
 
     private val onPageChangeCallback by lazy {
         object : ViewPager2.OnPageChangeCallback() {

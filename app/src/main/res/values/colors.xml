@@ -55,4 +55,6 @@
 
     <color name="divider">#1F000000</color>
     <color name="icon">@color/high_emphasis</color>
+    <color name="shadow">@color/dark_grey</color>
+    <color name="text">@color/high_emphasis</color>
 </resources>

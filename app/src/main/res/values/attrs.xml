@@ -4,4 +4,8 @@
         <attr name="itemHeight" format="dimension"/>
         <attr name="itemTextSize" format="dimension"/>
     </declare-styleable>
+
+    <declare-styleable name="DayOfWeekView">
+        <attr name="dayOfWeekHeight" format="dimension"/>
+    </declare-styleable>
 </resources>

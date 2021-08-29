@@ -2,17 +2,19 @@ package com.duke.orca.android.kotlin.lockscreencalendar.main.viewmodel
 
 import android.app.Application
 import android.content.Intent
+import android.provider.CalendarContract
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.duke.orca.android.kotlin.lockscreencalendar.calendar.model.CalendarItem
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.model.Model
-import com.duke.orca.android.kotlin.lockscreencalendar.calendar.repository.CalendarRepository
-import com.duke.orca.android.kotlin.lockscreencalendar.calendar.widget.CalendarView
+import com.duke.orca.android.kotlin.lockscreencalendar.calendar.repository.CalendarRepositoryImpl
 import com.duke.orca.android.kotlin.lockscreencalendar.util.SingleLiveEvent
 import java.util.*
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
-    val repository = CalendarRepository(application.applicationContext)
+    val repository = CalendarRepositoryImpl(application.applicationContext)
+    val today = Calendar.getInstance()
 
     private var _refresh = MutableLiveData<Unit>()
     val refresh: LiveData<Unit>
@@ -30,16 +32,41 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         _selectedDate.value = value
     }
 
-    private val _showEvents = SingleLiveEvent<CalendarView.ViewHolder>()
-    val showEvents: LiveData<CalendarView.ViewHolder>
+    private val _showEvents = SingleLiveEvent<CalendarItem>()
+    val showEvents: LiveData<CalendarItem>
         get() = _showEvents
 
-    fun callShowEvents(calendar: CalendarView.ViewHolder) {
-        _showEvents.value = calendar
+    fun callShowEvents(item: CalendarItem) {
+        _showEvents.value = item
     }
 
     var lastEvent: Model.Event? = null
-    var selectedItem: Model.CalendarItem? = null
+    var selectedItem: CalendarItem? = null
+
+    fun insertEvent(year: Int, month: Int, date: Int) {
+        lastEvent = repository.getLastEvent()
+
+        val eventBeginTime = Calendar.getInstance().apply {
+            set(Calendar.YEAR, year)
+            set(Calendar.MONTH, month)
+            set(Calendar.DATE, date)
+            set(Calendar.HOUR_OF_DAY, 8)
+            set(Calendar.MINUTE, 0)
+        }.timeInMillis
+
+        val eventEndTime = Calendar.getInstance().apply {
+            timeInMillis = eventBeginTime
+            add(Calendar.HOUR_OF_DAY, 1)
+        }.timeInMillis
+
+        val intent = Intent(Intent.ACTION_INSERT).apply {
+            data = CalendarContract.Events.CONTENT_URI
+            putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, eventBeginTime)
+            putExtra(CalendarContract.EXTRA_EVENT_END_TIME, eventEndTime)
+        }
+
+        setIntent(intent)
+    }
 
     private val _intent = SingleLiveEvent<Intent>()
     val intent: LiveData<Intent>

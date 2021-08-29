@@ -65,6 +65,7 @@ animator mtrl_fab_hide_motion_spec
 animator mtrl_fab_show_motion_spec
 animator mtrl_fab_transformation_sheet_collapse_spec
 animator mtrl_fab_transformation_sheet_expand_spec
+array days_of_week
 array months
 attr ConstraintRotate
 attr SharedValue
@@ -349,6 +350,7 @@ attr customPixelDimension
 attr customReference
 attr customStringValue
 attr dayInvalidStyle
+attr dayOfWeekHeight
 attr daySelectedStyle
 attr dayStyle
 attr dayTodayStyle
@@ -1347,6 +1349,7 @@ color secondary_text_default_material_dark
 color secondary_text_default_material_light
 color secondary_text_disabled_material_dark
 color secondary_text_disabled_material_light
+color shadow
 color surface
 color switch_thumb_disabled_material_dark
 color switch_thumb_disabled_material_light
@@ -1359,6 +1362,7 @@ color teal_400
 color teal_700
 color test_mtrl_calendar_day
 color test_mtrl_calendar_day_selected
+color text
 color tooltip_background_dark
 color tooltip_background_light
 color white
@@ -1543,11 +1547,13 @@ dimen height_28dp
 dimen height_32dp
 dimen height_360dp
 dimen height_36dp
+dimen height_384dp
 dimen height_40dp
 dimen height_44dp
 dimen height_480dp
 dimen height_48dp
 dimen height_4dp
+dimen height_512dp
 dimen height_52dp
 dimen height_56dp
 dimen height_60dp
@@ -1585,7 +1591,10 @@ dimen leak_canary_squiggly_span_period_degrees
 dimen leak_canary_squiggly_span_stroke_width
 dimen leak_canary_toast_icon_size
 dimen leak_canary_toast_icon_tv_padding
+dimen margin_128dp
 dimen margin_12dp
+dimen margin_144dp
+dimen margin_160dp
 dimen margin_16dp
 dimen margin_192dp
 dimen margin_20dp
@@ -1873,6 +1882,9 @@ dimen padding_72dp
 dimen padding_76dp
 dimen padding_80dp
 dimen padding_8dp
+dimen shadow_dx
+dimen shadow_dy
+dimen shadow_radius
 dimen subtitle_corner_radius
 dimen subtitle_outline_width
 dimen subtitle_shadow_offset
@@ -2047,6 +2059,7 @@ drawable ic_mtrl_checked_circle
 drawable ic_mtrl_chip_checked_black
 drawable ic_mtrl_chip_checked_circle
 drawable ic_mtrl_chip_close_circle
+drawable ic_round_calendar_today_48
 drawable ic_sharp_add_48
 drawable ic_sharp_event_24
 drawable leak_canary_count_background
@@ -2319,6 +2332,7 @@ id ignore
 id ignoreRequest
 id image
 id image_view_icon
+id image_view_insert
 id immediateStop
 id included
 id info
@@ -2330,7 +2344,6 @@ id jumpToEnd
 id jumpToStart
 id labeled
 id layout
-id layout_day_of_week
 id leak_canary_about_heap_dump_switch_button
 id leak_canary_about_heap_dump_text
 id leak_canary_about_text
@@ -2378,7 +2391,8 @@ id legacy
 id line1
 id line3
 id linear
-id linear_layout_insert
+id linear_layout_date_time
+id linear_layout_day_of_week
 id listMode
 id list_item
 id masked
@@ -2573,6 +2587,8 @@ id textSpacerNoButtons
 id textSpacerNoTitle
 id textStart
 id textTop
+id text_clock_date
+id text_clock_time
 id text_input_end_icon
 id text_input_error_icon
 id text_input_start_icon
@@ -2591,6 +2607,7 @@ id text_view_saturday
 id text_view_sunday
 id text_view_thursday
 id text_view_title
+id text_view_today
 id text_view_tuesday
 id text_view_wednesday
 id text_view_year
@@ -2879,6 +2896,8 @@ string error_icon_content_description
 string exposed_dropdown_menu_content_description
 string fab_transformation_scrim_behavior
 string fab_transformation_sheet_behavior
+string format_12_hour
+string format_date
 string friday
 string hide_bottom_view_on_scroll_behavior
 string icon_content_description
@@ -3802,6 +3821,7 @@ styleable ConstraintSet android_orientation android_id android_visibility androi
 styleable CoordinatorLayout keylines statusBarBackground
 styleable CoordinatorLayout_Layout android_layout_gravity layout_anchor layout_anchorGravity layout_behavior layout_dodgeInsetEdges layout_insetEdge layout_keyline
 styleable CustomAttribute attributeName customBoolean customColorDrawableValue customColorValue customDimension customFloatValue customIntegerValue customPixelDimension customReference customStringValue methodName
+styleable DayOfWeekView dayOfWeekHeight
 styleable DrawerArrowToggle arrowHeadLength arrowShaftLength barLength color drawableSize gapBetweenBars spinBars thickness
 styleable ExtendedFloatingActionButton collapsedSize elevation extendMotionSpec hideMotionSpec showMotionSpec shrinkMotionSpec
 styleable ExtendedFloatingActionButton_Behavior_Layout behavior_autoHide behavior_autoShrink

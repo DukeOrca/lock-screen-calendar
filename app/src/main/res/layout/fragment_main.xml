@@ -7,54 +7,133 @@
     android:background="#61000000"
     tools:context=".main.views.MainActivity">
 
-    <TextView
-        android:id="@+id/text_view_month"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_24dp"
-        android:layout_marginTop="@dimen/margin_24dp"
-        android:fontFamily="sans-serif-light"
-        android:gravity="center"
-        android:textColor="@color/white"
-        android:textSize="@dimen/text_size_32dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="AUG" />
-
-    <TextView
-        android:id="@+id/text_view_year"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_16dp"
-        android:textColor="@color/white"
-        android:textSize="@dimen/text_size_20dp"
-        app:layout_constraintBottom_toBottomOf="@+id/text_view_month"
-        app:layout_constraintStart_toEndOf="@+id/text_view_month"
-        app:layout_constraintTop_toTopOf="@+id/text_view_month"
-        tools:text="2021년" />
-
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/view_pager2"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/linear_layout_insert"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_view_month" />
-
     <LinearLayout
-        android:id="@+id/linear_layout_insert"
-        android:layout_width="@dimen/width_112dp"
-        android:layout_height="@dimen/height_48dp"
-        android:orientation="horizontal"
-        android:gravity="center"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        android:id="@+id/linear_layout_date_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_32dp"
+        android:layout_marginTop="@dimen/margin_40dp"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
+        <TextClock
+            android:id="@+id/text_clock_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_sharp_add_48"/>
+            android:fontFamily="sans-serif-light"
+            android:format12Hour="@string/format_12_hour"
+            android:gravity="center_vertical"
+            android:includeFontPadding="false"
+            android:shadowColor="@color/shadow"
+            android:shadowDx="@dimen/shadow_dx"
+            android:shadowDy="@dimen/shadow_dy"
+            android:shadowRadius="@dimen/shadow_radius"
+            android:textColor="@color/white"
+            android:textSize="40dp"
+            tools:text="12시 00분" />
+
+        <TextClock
+            android:id="@+id/text_clock_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-light"
+            android:format12Hour="@string/format_date"
+            android:gravity="center_vertical"
+            android:includeFontPadding="false"
+            android:shadowColor="@color/shadow"
+            android:shadowDx="@dimen/shadow_dx"
+            android:shadowDy="@dimen/shadow_dy"
+            android:shadowRadius="@dimen/shadow_radius"
+            android:textColor="@color/white"
+            android:textSize="32dp"
+            tools:text="Fri, January 1" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/rounded_corners"
+        android:backgroundTint="@color/surface"
+        android:paddingBottom="@dimen/padding_16dp"
+        android:paddingEnd="@dimen/padding_8dp"
+        android:paddingStart="@dimen/padding_8dp"
+        android:paddingTop="@dimen/padding_8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linear_layout_date_time">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/text_view_month"
+                android:layout_width="@dimen/width_64dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-light"
+                android:gravity="center"
+                android:textColor="@color/text"
+                android:textSize="@dimen/text_size_16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="AUG" />
+
+            <TextView
+                android:id="@+id/text_view_year"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_16dp"
+                android:fontFamily="sans-serif-light"
+                android:textColor="@color/text"
+                android:textSize="@dimen/text_size_16dp"
+                app:layout_constraintBottom_toBottomOf="@+id/text_view_month"
+                app:layout_constraintStart_toEndOf="@+id/text_view_month"
+                app:layout_constraintTop_toTopOf="@+id/text_view_month"
+                tools:text="2021년" />
+
+            <TextView
+                android:id="@+id/text_view_today"
+                android:layout_width="@dimen/width_28dp"
+                android:layout_height="@dimen/height_28dp"
+                android:layout_marginEnd="@dimen/margin_16dp"
+                android:background="@drawable/ic_round_calendar_today_48"
+                android:gravity="center"
+                android:paddingTop="@dimen/padding_4dp"
+                android:textColor="@color/text"
+                android:textSize="@dimen/text_size_14dp"
+                app:layout_constraintBottom_toBottomOf="@+id/image_view_insert"
+                app:layout_constraintEnd_toStartOf="@+id/image_view_insert"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="22" />
+
+            <ImageView
+                android:id="@+id/image_view_insert"
+                android:layout_width="@dimen/width_28dp"
+                android:layout_height="@dimen/height_28dp"
+                android:layout_marginEnd="@dimen/margin_8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_sharp_add_48"
+                app:tint="@color/icon"
+                tools:ignore="ContentDescription" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.duke.orca.android.kotlin.lockscreencalendar.calendar.widget.DayOfWeekView
+            android:id="@+id/linear_layout_day_of_week"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/height_24dp"
+            android:orientation="horizontal"
+            app:dayOfWeekHeight="@dimen/height_24dp"/>
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/view_pager2"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/height_360dp" />
 
     </LinearLayout>
 

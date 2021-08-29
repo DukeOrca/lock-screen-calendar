@@ -1,12 +1,11 @@
 package com.duke.orca.android.kotlin.lockscreencalendar.calendar.adapter
 
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.views.CalendarViewFragment
 import java.util.*
 
-class CalendarViewAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapter(fragmentActivity) {
+class CalendarViewAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
     override fun getItemCount(): Int = ITEM_COUNT
 
     override fun createFragment(position: Int): Fragment {

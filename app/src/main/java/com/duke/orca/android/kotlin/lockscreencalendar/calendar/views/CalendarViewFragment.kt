@@ -7,16 +7,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.lifecycleScope
 import com.duke.orca.android.kotlin.lockscreencalendar.PACKAGE_NAME
 import com.duke.orca.android.kotlin.lockscreencalendar.base.BaseFragment
+import com.duke.orca.android.kotlin.lockscreencalendar.calendar.model.CalendarItem
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.model.Model
-import com.duke.orca.android.kotlin.lockscreencalendar.calendar.repository.CalendarRepository
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.widget.CalendarView
 import com.duke.orca.android.kotlin.lockscreencalendar.databinding.FragmentCalendarViewBinding
 import com.duke.orca.android.kotlin.lockscreencalendar.main.viewmodel.MainViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.util.*
 
 class CalendarViewFragment : BaseFragment<FragmentCalendarViewBinding>() {
@@ -45,16 +42,35 @@ class CalendarViewFragment : BaseFragment<FragmentCalendarViewBinding>() {
         viewModel.repository.get(year, month)?.observe(viewLifecycleOwner, { calendar ->
             viewBinding.calendarView.setCalendar(calendar)
             viewBinding.calendarView.setOnItemClickListener(object : CalendarView.OnItemClickListener {
-                override fun onItemClick(item: Model.CalendarItem) {
-                    viewModel.selectedItem = item
+                override fun onItemClick(item: CalendarItem) {
+                    if (viewModel.selectedItem == item) {
+                        if (item.instances.isEmpty()) {
+                            viewModel.insertEvent(item.year, item.month, item.date)
+                        } else {
+                            Calendar.getInstance().apply {
+                                set(Calendar.YEAR, item.year)
+                                set(Calendar.MONTH, item.month)
+                                set(Calendar.DATE, item.date)
 
-                    Calendar.getInstance().apply {
-                        set(Calendar.YEAR, item.year)
-                        set(Calendar.MONTH, item.month)
-                        set(Calendar.DATE, item.date)
+                                viewModel.callShowEvents(item)
+                            }
+                        }
+                    } else {
+                        viewModel.selectedItem = item
 
-                        viewModel.callShowEvents(CalendarView.ViewHolder(viewBinding.calendarView, item))
+                        if (item.instances.isEmpty()) {
+                            // pass
+                        } else {
+                            Calendar.getInstance().apply {
+                                set(Calendar.YEAR, item.year)
+                                set(Calendar.MONTH, item.month)
+                                set(Calendar.DATE, item.date)
+
+                                viewModel.callShowEvents(item)
+                            }
+                        }
                     }
+
                 }
             })
         }) ?: let {
@@ -62,15 +78,15 @@ class CalendarViewFragment : BaseFragment<FragmentCalendarViewBinding>() {
                 it?.observe(viewLifecycleOwner, { calendar ->
                     viewBinding.calendarView.setCalendar(calendar)
                     viewBinding.calendarView.setOnItemClickListener(object : CalendarView.OnItemClickListener {
-                        override fun onItemClick(item: Model.CalendarItem) {
+                        override fun onItemClick(item: CalendarItem) {
                             viewModel.selectedItem = item
 
                             Calendar.getInstance().apply {
-                                set(Calendar.YEAR, year)
-                                set(Calendar.MONTH, month)
+                                set(Calendar.YEAR, item.year)
+                                set(Calendar.MONTH, item.month)
                                 set(Calendar.DATE, item.date)
 
-                                viewModel.callShowEvents(CalendarView.ViewHolder(viewBinding.calendarView, item))
+                                viewModel.callShowEvents(item)
                             }
                         }
                     })

@@ -59,7 +59,10 @@
     <dimen name="height_256dp">256dp</dimen>
 
     <dimen name="height_360dp">360dp</dimen>
+    <dimen name="height_384dp">384dp</dimen>
     <dimen name="height_480dp">480dp</dimen>
+
+    <dimen name="height_512dp">512dp</dimen>
 
     <dimen name="margin_2dp">2dp</dimen>
 
@@ -84,6 +87,9 @@
     <dimen name="margin_76dp">76dp</dimen>
     <dimen name="margin_80dp">80dp</dimen>
 
+    <dimen name="margin_128dp">128dp</dimen>
+    <dimen name="margin_144dp">144dp</dimen>
+    <dimen name="margin_160dp">160dp</dimen>
     <dimen name="margin_192dp">192dp</dimen>
 
     <dimen name="padding_1dp">1dp</dimen>
@@ -160,4 +166,8 @@
     <dimen name="width_256dp">256dp</dimen>
 
     <dimen name="default_rounded_corner">16dp</dimen>
+
+    <item name="shadow_dx" format="float" type="dimen">1.0</item>
+    <item name="shadow_dy" format="float" type="dimen">1.0</item>
+    <item name="shadow_radius" format="float" type="dimen">1.0</item>
 </resources>

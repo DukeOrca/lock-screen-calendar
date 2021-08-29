@@ -1,3 +1,5 @@
+com/duke/orca/android/kotlin/lockscreencalendar/BuildConfig.java
+ com.duke.orca.android.kotlin.lockscreencalendar.BuildConfig
 com/duke/orca/android/kotlin/lockscreencalendar/databinding/FragmentInstancesViewBinding.java
  com.duke.orca.android.kotlin.lockscreencalendar.databinding.FragmentInstancesViewBinding
 com/duke/orca/android/kotlin/lockscreencalendar/databinding/FragmentCalendarViewBinding.java
@@ -8,8 +10,6 @@ com/duke/orca/android/kotlin/lockscreencalendar/databinding/PermissionBinding.ja
  com.duke.orca.android.kotlin.lockscreencalendar.databinding.PermissionBinding
 com/duke/orca/android/kotlin/lockscreencalendar/databinding/InstanceItemViewBinding.java
  com.duke.orca.android.kotlin.lockscreencalendar.databinding.InstanceItemViewBinding
-com/duke/orca/android/kotlin/lockscreencalendar/BuildConfig.java
- com.duke.orca.android.kotlin.lockscreencalendar.BuildConfig
 com/duke/orca/android/kotlin/lockscreencalendar/databinding/FragmentInstancesViewPagerBinding.java
  com.duke.orca.android.kotlin.lockscreencalendar.databinding.FragmentInstancesViewPagerBinding
 com/duke/orca/android/kotlin/lockscreencalendar/databinding/DayOfWeekBinding.java

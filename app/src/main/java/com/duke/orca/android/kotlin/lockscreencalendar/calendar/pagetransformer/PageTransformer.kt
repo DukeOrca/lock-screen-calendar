@@ -1,31 +1,33 @@
 package com.duke.orca.android.kotlin.lockscreencalendar.calendar.pagetransformer
 
-import android.util.Log
 import android.view.View
 import androidx.viewpager2.widget.ViewPager2
 import kotlin.math.abs
 
-private const val MIN_SCALE = 0.75F
-private const val MIN_ALPHA = 0.87F
-
 class PageTransformer : ViewPager2.PageTransformer {
     override fun transformPage(view: View, position: Float) {
         view.apply {
-            var p = position
-            if (abs(position) < 0.5)
-                p = 0.5F
+            var scalingFactor = if (abs(position) < 0.4F) {
+                1F
+            } else {
+                1.4F - abs(position)
+            }
 
-            var scalingFactor = 1.5F - abs(p)
+            alpha = scalingFactor
 
-            if (scalingFactor < 1)
-                scalingFactor += (1 - scalingFactor) / 2
+            if (scalingFactor < 1F)
+                scalingFactor += (1F - scalingFactor) / 2F
 
-            var horizontalMargin = width * (1.0F - scalingFactor) / 2F
+            val left = width * (1F - scalingFactor) / 2F
+
+            translationX = if (position < 0F) {
+                left / 2F
+            } else {
+                -left / 2F
+            }
 
             scaleX = scalingFactor
             scaleY = scalingFactor
-
-            alpha = (MIN_ALPHA + (((scalingFactor - MIN_SCALE) / (1 - MIN_SCALE)) * (1 - MIN_ALPHA)))
         }
     }
 }
