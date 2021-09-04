@@ -9,14 +9,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.transition.Explode
 import com.duke.orca.android.kotlin.lockscreencalendar.PACKAGE_NAME
 import com.duke.orca.android.kotlin.lockscreencalendar.base.BaseFragment
-import com.duke.orca.android.kotlin.lockscreencalendar.calendar.TRANSITION_NAME
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.adapter.InstanceAdapter
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.model.Model
+import com.duke.orca.android.kotlin.lockscreencalendar.calendar.viewmodel.InstancesViewModel
 import com.duke.orca.android.kotlin.lockscreencalendar.databinding.FragmentInstancesViewBinding
 import com.duke.orca.android.kotlin.lockscreencalendar.main.viewmodel.MainViewModel
 import kotlinx.coroutines.Dispatchers
@@ -32,7 +33,8 @@ class InstancesViewFragment : BaseFragment<FragmentInstancesViewBinding>() {
         return FragmentInstancesViewBinding.inflate(inflater, container, false)
     }
 
-    private val viewModel by activityViewModels<MainViewModel>()
+    private val viewModel by viewModels<InstancesViewModel>()
+    //private val viewModel by viewModels<InstancesViewModel>()
 
     private val adapter = InstanceAdapter().apply {
         setOnItemClickListener(object : InstanceAdapter.OnItemClickListener {
@@ -44,7 +46,7 @@ class InstancesViewFragment : BaseFragment<FragmentInstancesViewBinding>() {
                     putExtra(CalendarContract.EXTRA_EVENT_END_TIME, item.end)
                 }
 
-                viewModel.setIntent(intent)
+                //mainViewModel.setIntent(intent)
             }
         })
     }
@@ -60,6 +62,8 @@ class InstancesViewFragment : BaseFragment<FragmentInstancesViewBinding>() {
         val month = arguments?.getInt(Key.MONTH) ?: 0
         val date = arguments?.getInt(Key.DATE) ?: 0
 
+        viewModel.query(year, month, date)
+
         viewBinding.textViewDate.text = date.toString()
 
         viewBinding.recyclerView.apply {
@@ -68,24 +72,26 @@ class InstancesViewFragment : BaseFragment<FragmentInstancesViewBinding>() {
             setHasFixedSize(true)
         }
 
-        adapter.submitList(viewModel.repository.getInstances(year, month, date))
+//        mainViewModel.refresh.observe(viewLifecycleOwner, {
+//            loadInstances(year, month, date)
+//        })
 
-        viewModel.refresh.observe(viewLifecycleOwner, {
-            loadInstances(year, month, date)
+        viewModel.instances.observe(viewLifecycleOwner, {
+            adapter.submitList(it)
         })
 
         return viewBinding.root
     }
 
-    private fun loadInstances(year: Int, month: Int, date: Int) {
-        lifecycleScope.launch(Dispatchers.IO) {
-            viewModel.repository.getInstances(year, month, date).also {
-                withContext(Dispatchers.Main) {
-                    adapter.submitList(it)
-                }
-            }
-        }
-    }
+//    private fun loadInstances(year: Int, month: Int, date: Int) {
+//        lifecycleScope.launch(Dispatchers.IO) {
+//            mainViewModel.repository.getInstances(year, month, date).also {
+//                withContext(Dispatchers.Main) {
+//                    adapter.submitList(it)
+//                }
+//            }
+//        }
+//    }
 
     companion object {
         private object Key {

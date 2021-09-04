@@ -1,11 +1,14 @@
 package com.duke.orca.android.kotlin.lockscreencalendar.main.views
 
 import android.os.Bundle
+import android.transition.TransitionInflater
 import android.view.WindowManager
+import androidx.appcompat.app.AppCompatActivity
+import androidx.transition.Explode
 import com.duke.orca.android.kotlin.lockscreencalendar.R
 import com.duke.orca.android.kotlin.lockscreencalendar.base.BaseActivity
 
-class MainActivity : BaseActivity() {
+class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)

@@ -2727,6 +2727,7 @@ layout abc_search_dropdown_item_icons_2line
 layout abc_search_view
 layout abc_select_dialog_material
 layout abc_tooltip
+layout activity_instances_view_pager
 layout activity_main
 layout blind_screen
 layout custom_dialog
@@ -2748,7 +2749,6 @@ layout design_text_input_end_icon
 layout design_text_input_start_icon
 layout fragment_calendar_view
 layout fragment_instances_view
-layout fragment_instances_view_pager
 layout fragment_main
 layout fragment_permission_dialog
 layout instance_item_view
@@ -3466,6 +3466,7 @@ style Theme_Design_Light
 style Theme_Design_Light_BottomSheetDialog
 style Theme_Design_Light_NoActionBar
 style Theme_Design_NoActionBar
+style Theme_Dialog
 style Theme_LockScreenCalendar
 style Theme_MaterialComponents
 style Theme_MaterialComponents_BottomSheetDialog
@@ -3922,6 +3923,7 @@ styleable ViewStubCompat android_id android_layout android_inflatedId
 styleable ViewTransition android_id SharedValue SharedValueId clearsTag duration ifTagNotSet ifTagSet motionInterpolator motionTarget onStateTransition pathMotionArc setsTag transitionDisable upDuration viewTransitionMode
 styleable include constraintSet
 styleable leak_canary_MoreDetailsView leak_canary_plus_color
+transition explode
 xml leak_canary_file_paths
 xml standalone_badge
 xml standalone_badge_gravity_bottom_end

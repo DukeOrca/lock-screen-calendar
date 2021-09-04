@@ -1,29 +1,37 @@
 package com.duke.orca.android.kotlin.lockscreencalendar.main.views
 
+import android.app.ActivityOptions
 import android.content.Intent
 import android.os.Bundle
 import android.provider.CalendarContract
+import android.transition.TransitionInflater
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.findFragment
+import androidx.transition.Explode
 import androidx.viewpager2.widget.ViewPager2
 import com.duke.orca.android.kotlin.lockscreencalendar.PACKAGE_NAME
 import com.duke.orca.android.kotlin.lockscreencalendar.R
 import com.duke.orca.android.kotlin.lockscreencalendar.base.BaseFragment
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.DAYS_PER_WEEK
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.MONTHS_PER_YEAR
-import com.duke.orca.android.kotlin.lockscreencalendar.calendar.TRANSITION_NAME
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.adapter.CalendarViewAdapter
+import com.duke.orca.android.kotlin.lockscreencalendar.calendar.views.InstancesViewPagerActivity
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.views.InstancesViewPagerFragment
+import com.duke.orca.android.kotlin.lockscreencalendar.calendar.widget.CalendarItemView
+import com.duke.orca.android.kotlin.lockscreencalendar.calendar.widget.CalendarView
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.widget.DayOfWeekItemView
 import com.duke.orca.android.kotlin.lockscreencalendar.databinding.FragmentMainBinding
 import com.duke.orca.android.kotlin.lockscreencalendar.main.viewmodel.MainViewModel
 import com.duke.orca.android.kotlin.lockscreencalendar.main.views.MainFragment.ActivityResultLauncher.KEY_PERMISSION
 import com.duke.orca.android.kotlin.lockscreencalendar.permission.PermissionChecker
 import com.duke.orca.android.kotlin.lockscreencalendar.permission.view.PermissionRationaleDialogFragment
+import timber.log.Timber
 import java.util.*
 
 class MainFragment : BaseFragment<FragmentMainBinding>(), PermissionRationaleDialogFragment.OnPermissionActionClickListener {
@@ -57,7 +65,6 @@ class MainFragment : BaseFragment<FragmentMainBinding>(), PermissionRationaleDia
             val lastEvent = viewModel.repository.getLastEvent() ?: return@let
 
             if (it.id < lastEvent.id) {
-                //새 인스턴스 추가됨. dtstart 로 해당 month 로 이동 후. 리플래시.
                 lastEvent.DTSTART
                 Calendar.getInstance().apply {
                     timeInMillis = lastEvent.DTSTART
@@ -66,7 +73,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(), PermissionRationaleDia
                     val month = get(Calendar.MONTH)
                     val date = get(Calendar.DATE)
 
-                    scrollTo(year, month, true, false)
+                    scrollTo(year, month, true)
                 }
             }
         }
@@ -103,7 +110,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(), PermissionRationaleDia
     ): View {
         super.onCreateView(inflater, container, savedInstanceState)
 
-        viewModel.load()
+        sharedElementReturnTransition = Explode()
 
         initData()
         initializeViews()
@@ -206,15 +213,48 @@ class MainFragment : BaseFragment<FragmentMainBinding>(), PermissionRationaleDia
                     putInt(InstancesViewPagerFragment.Key.DATE, item.date)
                 }
 
-                it.arguments = arguments
+                val view = viewBinding.viewPager2.findViewWithTag<CalendarView>(item.year * 100 + item.month)
+                val rview = view.getChildAt(item.position)
 
-                // todo find view 로직으로 찾아와야한다..
+                val activityOptions = ActivityOptions.makeSceneTransitionAnimation(
+                    requireActivity(), rview, "transition_name"
+                )
+                val intent = Intent(requireContext(), InstancesViewPagerActivity::class.java).apply {
+                    putExtra(InstancesViewPagerFragment.Key.YEAR, item.year)
+                    putExtra(InstancesViewPagerFragment.Key.MONTH, item.month)
+                    putExtra(InstancesViewPagerFragment.Key.DATE, item.date)
+                }
+                startActivity(intent)//, activityOptions.toBundle())
 
-                parentFragmentManager.beginTransaction()
-                    //.addSharedElement(calendarView, TRANSITION_NAME)
-                    .add(R.id.fragment_container_view, it, it.tag)
-                    .addToBackStack(null)
-                    .commit()
+//                it.arguments = arguments
+//
+//                // todo find view 로직으로 찾아와야한다..
+//
+//                val transaction = parentFragmentManager.beginTransaction()
+//
+//                val view = viewBinding.viewPager2.findViewWithTag<CalendarView>(item.year * 100 + item.month)
+//                val rview = view.getChildAt(item.position)
+//
+//                val changeImageTransform = TransitionInflater.from(requireContext())
+//                    .inflateTransition(R.transition.explode).apply {
+//                        duration = resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
+//                    }
+//
+//                it.setSharedElementEnterTransition(changeImageTransform)
+//                it.setSharedElementReturnTransition(changeImageTransform)
+//
+//                Timber.tag("sjk")
+//                Timber.d("view is null?: $rview")
+//                if (rview is CalendarItemView) {
+//                    viewBinding.textClockTime.transitionName = "transition_name"
+//                    transaction.addSharedElement(viewBinding.textClockTime, "transition_name")
+//                }
+//
+//                transaction
+//                    .setReorderingAllowed(true)
+//                    .replace(R.id.fragment_container_view, it, it.tag)
+//                    .addToBackStack(null)
+//                    .commit()
             }
         })
 
@@ -234,7 +274,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(), PermissionRationaleDia
         })
     }
 
-    private fun scrollTo(year: Int, month: Int, reload: Boolean = false, smoothScroll: Boolean = false) {
+    private fun scrollTo(year: Int, month: Int, smoothScroll: Boolean) {
         val currentItem = viewBinding.viewPager2.currentItem
 
         val from = Calendar.getInstance().apply {
@@ -255,9 +295,5 @@ class MainFragment : BaseFragment<FragmentMainBinding>(), PermissionRationaleDia
         val amount = toMonth - fromMonth + (toYear - fromYear) * MONTHS_PER_YEAR
 
         viewBinding.viewPager2.setCurrentItem(currentItem + amount, smoothScroll)
-
-        if (reload) {
-            viewModel.repository.put(year, month)
-        }
     }
 }

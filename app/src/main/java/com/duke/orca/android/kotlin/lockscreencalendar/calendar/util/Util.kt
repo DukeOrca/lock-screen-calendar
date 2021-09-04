@@ -2,10 +2,10 @@ package com.duke.orca.android.kotlin.lockscreencalendar.calendar.util
 
 import java.util.*
 
-fun Long.toDayOfMonth(): Int {
+fun Long.toDate(): Int {
     return Calendar.getInstance().also {
         it.timeInMillis = this
-    }.get(Calendar.DAY_OF_MONTH)
+    }.get(Calendar.DATE)
 }
 
 fun Long.toHourOfDay(): Int {
@@ -36,6 +36,8 @@ fun getFirstDayOfWeekOfMonth(year: Int, month: Int): Int {
     return Calendar.getInstance().apply {
         set(Calendar.YEAR, year)
         set(Calendar.MONTH, month)
-        set(Calendar.DAY_OF_MONTH, 1)
+        set(Calendar.DATE, 1)
     }[Calendar.DAY_OF_WEEK]
 }
+
+fun Calendar.getYearMonthDay() = get(Calendar.YEAR) * 10000 + get(Calendar.MONTH) * 100 + get(Calendar.DATE)

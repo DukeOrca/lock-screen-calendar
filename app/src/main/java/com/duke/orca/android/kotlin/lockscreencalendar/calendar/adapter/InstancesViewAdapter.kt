@@ -11,6 +11,7 @@ import kotlinx.coroutines.withContext
 import java.util.*
 
 class InstancesViewAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
+
     override fun getItemCount(): Int = ITEM_COUNT
 
     override fun createFragment(position: Int): Fragment {

@@ -7,14 +7,20 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.model.CalendarItem
+import com.duke.orca.android.kotlin.lockscreencalendar.calendar.model.Instance
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.model.Model
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.repository.CalendarRepositoryImpl
 import com.duke.orca.android.kotlin.lockscreencalendar.util.SingleLiveEvent
 import java.util.*
+import kotlin.collections.LinkedHashMap
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
     val repository = CalendarRepositoryImpl(application.applicationContext)
     val today = Calendar.getInstance()
+
+    suspend fun getInstances(year: Int, month: Int): LinkedHashMap<Int, ArrayList<Instance>> {
+        return repository.getInstances(year, month)
+    }
 
     private var _refresh = MutableLiveData<Unit>()
     val refresh: LiveData<Unit>
@@ -74,9 +80,5 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun setIntent(intent: Intent) {
         _intent.value = intent
-    }
-
-    fun load() {
-        repository.initialLoad()
     }
 }

@@ -10,7 +10,9 @@ import com.duke.orca.android.kotlin.lockscreencalendar.BLANK
 import com.duke.orca.android.kotlin.lockscreencalendar.R
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.DAYS_PER_WEEK
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.VISIBLE_INSTANCE_COUNT
+import com.duke.orca.android.kotlin.lockscreencalendar.calendar.model.CalItem2
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.model.CalendarItem
+import com.duke.orca.android.kotlin.lockscreencalendar.calendar.model.Model
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.widget.CalendarItemView.Height
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.widget.CalendarItemView.Margin.CALENDAR_COLOR_END
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.widget.CalendarItemView.Margin.CALENDAR_COLOR_START
@@ -54,7 +56,7 @@ class CalendarItemView : View {
         const val CALENDAR_COLOR = 2
     }
 
-    private var item: CalendarItem? = null
+    private var item: CalItem2? = null
     private val bounds = Rect()
 
     private lateinit var dateTextPaint: TextPaint
@@ -64,17 +66,17 @@ class CalendarItemView : View {
     private val calendarColorPaint = Paint()
     private val calendarColorRect = Rect()
 
-    constructor(context: Context, item: CalendarItem?): super(context) {
+    constructor(context: Context, item: CalItem2): super(context) {
         this.item = item
 
-        val dayOfWeek = (item?.position ?: 0) % DAYS_PER_WEEK
+        val dayOfWeek = item.dayOfWeek
 
         dateTextPaint = TextPaint().apply {
             isAntiAlias = true
             textSize = TextSize.DATE.toPx
             color = when(dayOfWeek) {
-                Calendar.SATURDAY.dec() -> ContextCompat.getColor(context, R.color.light_blue_400)
-                Calendar.SUNDAY.dec() -> ContextCompat.getColor(context, R.color.red_400)
+                Calendar.SATURDAY -> ContextCompat.getColor(context, R.color.light_blue_400)
+                Calendar.SUNDAY -> ContextCompat.getColor(context, R.color.red_400)
                 else -> Color.WHITE
             }
         }
@@ -106,11 +108,11 @@ class CalendarItemView : View {
         val text = item.date.toString()
         var currentY = DATE_TOP.toPx
 
-        if (item !is CalendarItem.DayOfMonth) {
-            calendarColorPaint.alpha = ALPHA
-            dateTextPaint.alpha = ALPHA
-            instanceTextPaint.alpha = ALPHA
-        }
+//        if (item !is CalendarItem.DayOfMonth) {
+//            calendarColorPaint.alpha = ALPHA
+//            dateTextPaint.alpha = ALPHA
+//            instanceTextPaint.alpha = ALPHA
+//        }
 
         with(bounds) {
             dateTextPaint.getTextBounds(text, 0, text.length, this)
@@ -121,6 +123,9 @@ class CalendarItemView : View {
 
         currentY += DATE_BOTTOM.toPx
 
+        Timber.tag("sjk")
+        Timber.d("visible in itemview: ${item.yearMonthDay}  ${item.visibleInstances.map {it?.title}}")
+
         item.visibleInstances.forEachIndexed { index, instance ->
             if (index > VISIBLE_INSTANCE_COUNT) {
                 return@forEachIndexed
@@ -129,12 +134,12 @@ class CalendarItemView : View {
             bounds.set(0, 0, width, Height.INSTANCE.toPx)
 
             instance?.let {
-                val right = this.width * it.getColumnCount() - CALENDAR_COLOR_END.toPx
+                val right = this.width * 1/*it.spanCount*/ - CALENDAR_COLOR_END.toPx
 
                 canvas.save()
                 canvas.clipRect(0, 0, right, this.height)
 
-                val title = if (it.isVisible) {
+                val title = if (true/*it.isVisible*/) {
                     calendarColorPaint.color = instance.calendarColor
                     instanceTextPaint.color = ColorCalculator.onBackgroundColor(
                         instance.calendarColor,
@@ -149,15 +154,15 @@ class CalendarItemView : View {
                     BLANK
                 }
 
-                if (item !is CalendarItem.DayOfMonth) {
-                    calendarColorPaint.alpha = ALPHA
-                    instanceTextPaint.alpha = ALPHA
-                }
+//                if (item !is CalendarItem.DayOfMonth) {
+//                    calendarColorPaint.alpha = ALPHA
+//                    instanceTextPaint.alpha = ALPHA
+//                }
 
-                if (it.isVisible) {
+                if (true/*it.isVisible*/) {
                     val bottom = currentY.toInt() + bounds.height()
 
-                    if (instance.fillBackgroundColor) {
+                    if (false /*instance.fillBackgroundColor*/) {
                         canvas.drawRect(calendarColorRect.apply {
                             set(CALENDAR_COLOR_START.toPx, currentY.toInt(), right, bottom)
                         }, calendarColorPaint)
@@ -168,7 +173,7 @@ class CalendarItemView : View {
                     }
                 }
 
-                val x = if (it.fillBackgroundColor)
+                val x = if (false/*it.fillBackgroundColor*/)
                     INSTANCE_START_SMALL.toPx
                 else
                     INSTANCE_START_LARGE.toPx
@@ -216,7 +221,7 @@ class CalendarItemView : View {
         }
     }
 
-    private fun TextPaint.fontHeight() = fontMetrics.run {
+    private fun TextPaint.height() = fontMetrics.run {
         bottom - ascent
     }
 

@@ -38,6 +38,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.duke.orca.android.kotlin.lockscreencalendar.calendar.views.InstancesViewPagerActivity"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:theme="@style/Theme.Dialog" />
 
         <service
             android:name="leakcanary.internal.HeapAnalyzerService"

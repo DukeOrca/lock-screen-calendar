@@ -1,6 +1,8 @@
 package com.duke.orca.android.kotlin.lockscreencalendar.calendar.model
 
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.VISIBLE_INSTANCE_COUNT
+import java.util.*
+import kotlin.collections.ArrayList
 
 sealed class CalendarItem {
     abstract val year: Int
@@ -42,4 +44,21 @@ sealed class CalendarItem {
             VISIBLE_INSTANCE_COUNT
         )
     ) : CalendarItem()
+}
+
+class CalItem2(
+    val timeInMillis2: Long,
+    val nextKey: Int,
+    val instances: ArrayList<Instance> = arrayListOf(),
+    val visibleInstances: Array<Instance?> = arrayOfNulls(VISIBLE_INSTANCE_COUNT)
+) {
+    val calendar = Calendar.getInstance().apply {
+        this.timeInMillis = timeInMillis2
+    }
+    val date = calendar.get(Calendar.DATE)
+    val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
+    val month = calendar.get(Calendar.MONTH)
+    val year = calendar.get(Calendar.YEAR)
+
+    val yearMonthDay = year * 10000 + month * 100 + date
 }

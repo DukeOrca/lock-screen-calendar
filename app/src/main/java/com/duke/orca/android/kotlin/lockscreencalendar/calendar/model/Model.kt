@@ -9,7 +9,7 @@ sealed class Model {
         val month: Int,
         val items: Array<CalendarItem?>,
         val indexOfFirstDayOfMonth: Int,
-        val indexOfLastDayOfMonth: Int
+        val indexOfLastDayOfMonth: Int,
     )
 
     data class Event(
@@ -22,12 +22,13 @@ sealed class Model {
         val begin: Long,
         @ColorInt
         val calendarColor: Int,
-        val calendarDisplayName: String,
         val calendarId: Long,
         val end: Long,
+        val endDay: Int,
         val eventId: Long,
         val id: Long,
         val month: Int,
+        val startDay: Int,
         val title: String,
         var beginDayOfMonth: Int,
         var duration: Int,
@@ -39,12 +40,13 @@ sealed class Model {
             isAllDay = isAllDay,
             begin = begin,
             calendarColor = calendarColor,
-            calendarDisplayName = calendarDisplayName,
             calendarId = calendarId,
             end = end,
+            endDay = endDay,
             eventId = eventId,
             id = id,
             month = month,
+            startDay = startDay,
             title = title,
             beginDayOfMonth = beginDayOfMonth,
             duration = duration,

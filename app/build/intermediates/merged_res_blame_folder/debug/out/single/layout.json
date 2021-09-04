@@ -28,6 +28,10 @@
         "source": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/src/main/res/layout/blind_screen.xml"
     },
     {
+        "merged": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/activity_instances_view_pager.xml",
+        "source": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/src/main/res/layout/activity_instances_view_pager.xml"
+    },
+    {
         "merged": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/fragment_main.xml",
         "source": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/src/main/res/layout/fragment_main.xml"
     },

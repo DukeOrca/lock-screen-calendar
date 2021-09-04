@@ -2726,6 +2726,7 @@ int layout abc_search_dropdown_item_icons_2line 0x7f0c0018
 int layout abc_search_view 0x7f0c0019
 int layout abc_select_dialog_material 0x7f0c001a
 int layout abc_tooltip 0x7f0c001b
+int layout activity_instances_view_pager 0x7f0c0092
 int layout activity_main 0x7f0c001c
 int layout blind_screen 0x7f0c001d
 int layout custom_dialog 0x7f0c001e
@@ -2747,7 +2748,6 @@ int layout design_text_input_end_icon 0x7f0c002d
 int layout design_text_input_start_icon 0x7f0c002e
 int layout fragment_calendar_view 0x7f0c002f
 int layout fragment_instances_view 0x7f0c0030
-int layout fragment_instances_view_pager 0x7f0c0031
 int layout fragment_main 0x7f0c0032
 int layout fragment_permission_dialog 0x7f0c0033
 int layout instance_item_view 0x7f0c0034
@@ -3465,6 +3465,7 @@ int style Theme_Design_Light 0x7f1001a4
 int style Theme_Design_Light_BottomSheetDialog 0x7f1001a5
 int style Theme_Design_Light_NoActionBar 0x7f1001a6
 int style Theme_Design_NoActionBar 0x7f1001a7
+int style Theme_Dialog 0x7f1002dd
 int style Theme_LockScreenCalendar 0x7f1001a8
 int style Theme_MaterialComponents 0x7f1001a9
 int style Theme_MaterialComponents_BottomSheetDialog 0x7f1001aa
@@ -5671,6 +5672,7 @@ int[] styleable include { 0x7f0400e3 }
 int styleable include_constraintSet 0
 int[] styleable leak_canary_MoreDetailsView { 0x7f04022d }
 int styleable leak_canary_MoreDetailsView_leak_canary_plus_color 0
+int transition explode 0x7f130000
 int xml leak_canary_file_paths 0x7f120000
 int xml standalone_badge 0x7f120001
 int xml standalone_badge_gravity_bottom_end 0x7f120002

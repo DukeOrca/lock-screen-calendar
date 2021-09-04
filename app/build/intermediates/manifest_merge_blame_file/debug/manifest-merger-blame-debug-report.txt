@@ -36,7 +36,7 @@
 18-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:24:22-78
 19
 20    <application
-20-->/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/src/main/AndroidManifest.xml:14:5-32:19
+20-->/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/src/main/AndroidManifest.xml:14:5-39:19
 21        android:name="com.duke.orca.android.kotlin.lockscreencalendar.main.MainApplication"
 21-->/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/src/main/AndroidManifest.xml:18:9-45
 22        android:allowBackup="true"
@@ -73,127 +73,137 @@
 38-->/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/src/main/AndroidManifest.xml:29:27-74
 39            </intent-filter>
 40        </activity>
-41
-42        <service
-42-->[com.squareup.leakcanary:leakcanary-android:2.7] /Users/kimseongju/.gradle/caches/transforms-3/d55e02685142a1a4d169e79f7efa8c2a/transformed/jetified-leakcanary-android-2.7/AndroidManifest.xml:23:9-25:40
-43            android:name="leakcanary.internal.HeapAnalyzerService"
-43-->[com.squareup.leakcanary:leakcanary-android:2.7] /Users/kimseongju/.gradle/caches/transforms-3/d55e02685142a1a4d169e79f7efa8c2a/transformed/jetified-leakcanary-android-2.7/AndroidManifest.xml:24:13-67
-44            android:exported="false" />
-44-->[com.squareup.leakcanary:leakcanary-android:2.7] /Users/kimseongju/.gradle/caches/transforms-3/d55e02685142a1a4d169e79f7efa8c2a/transformed/jetified-leakcanary-android-2.7/AndroidManifest.xml:25:13-37
-45
-46        <activity
-46-->[com.karumi:dexter:6.2.2] /Users/kimseongju/.gradle/caches/transforms-3/cbda368b96f4e57a1e37202a87c80478/transformed/jetified-dexter-6.2.2/AndroidManifest.xml:27:9-29:72
-47            android:name="com.karumi.dexter.DexterActivity"
-47-->[com.karumi:dexter:6.2.2] /Users/kimseongju/.gradle/caches/transforms-3/cbda368b96f4e57a1e37202a87c80478/transformed/jetified-dexter-6.2.2/AndroidManifest.xml:28:13-60
-48            android:theme="@style/Dexter.Internal.Theme.Transparent" />
-48-->[com.karumi:dexter:6.2.2] /Users/kimseongju/.gradle/caches/transforms-3/cbda368b96f4e57a1e37202a87c80478/transformed/jetified-dexter-6.2.2/AndroidManifest.xml:29:13-69
-49
-50        <provider
-50-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:29:9-37:20
-51            android:name="leakcanary.internal.LeakCanaryFileProvider"
-51-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:30:13-70
-52            android:authorities="com.squareup.leakcanary.fileprovider.com.duke.orca.android.kotlin.lockscreencalendar"
-52-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:31:13-88
-53            android:exported="false"
-53-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:32:13-37
-54            android:grantUriPermissions="true" >
-54-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:33:13-47
-55            <meta-data
-55-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:34:13-36:66
-56                android:name="android.support.FILE_PROVIDER_PATHS"
-56-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:35:17-67
-57                android:resource="@xml/leak_canary_file_paths" />
-57-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:36:17-63
-58        </provider>
-59
-60        <activity
-60-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:39:9-44:66
-61            android:name="leakcanary.internal.activity.LeakActivity"
-61-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:40:13-69
-62            android:icon="@mipmap/leak_canary_icon"
-62-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:41:13-52
-63            android:label="@string/leak_canary_display_activity_label"
-63-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:42:13-71
-64            android:taskAffinity="com.squareup.leakcanary.com.duke.orca.android.kotlin.lockscreencalendar"
-64-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:43:13-76
-65            android:theme="@style/leak_canary_LeakCanary.Base" />
-65-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:44:13-63
-66
-67        <activity-alias
-67-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:46:9-63:26
-68            android:name="leakcanary.internal.activity.LeakLauncherActivity"
-68-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:47:13-77
-69            android:banner="@drawable/leak_canary_tv_icon"
-69-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:48:13-59
-70            android:enabled="@bool/leak_canary_add_launcher_icon"
-70-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:49:13-66
-71            android:exported="true"
-71-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:50:13-36
-72            android:icon="@mipmap/leak_canary_icon"
-72-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:51:13-52
-73            android:label="@string/leak_canary_display_activity_label"
-73-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:52:13-71
-74            android:targetActivity="leakcanary.internal.activity.LeakActivity"
-74-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:53:13-79
-75            android:taskAffinity="com.squareup.leakcanary.com.duke.orca.android.kotlin.lockscreencalendar"
-75-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:54:13-76
-76            android:theme="@style/leak_canary_LeakCanary.Base" >
-76-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:55:13-63
-77            <intent-filter>
-77-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:56:13-62:29
-78                <action android:name="android.intent.action.MAIN" />
-78-->/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/src/main/AndroidManifest.xml:27:17-69
-78-->/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/src/main/AndroidManifest.xml:27:25-66
-79
-80                <category android:name="android.intent.category.LAUNCHER" />
-80-->/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/src/main/AndroidManifest.xml:29:17-77
-80-->/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/src/main/AndroidManifest.xml:29:27-74
-81                <!-- Android TV launcher intent -->
-82                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
-82-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:61:17-86
-82-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:61:27-83
-83            </intent-filter>
-84        </activity-alias>
-85
-86        <activity
-86-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:65:9-71:68
-87            android:name="leakcanary.internal.RequestStoragePermissionActivity"
-87-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:66:13-80
-88            android:excludeFromRecents="true"
-88-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:67:13-46
-89            android:icon="@mipmap/leak_canary_icon"
-89-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:68:13-52
-90            android:label="@string/leak_canary_storage_permission_activity_label"
-90-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:69:13-82
-91            android:taskAffinity="com.squareup.leakcanary.com.duke.orca.android.kotlin.lockscreencalendar"
-91-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:70:13-76
-92            android:theme="@style/leak_canary_Theme.Transparent" />
-92-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:71:13-65
-93
-94        <receiver android:name="leakcanary.internal.NotificationReceiver" />
-94-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:73:9-77
-94-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:73:19-74
-95
-96        <provider
-96-->[com.squareup.leakcanary:leakcanary-object-watcher-android:2.7] /Users/kimseongju/.gradle/caches/transforms-3/08c438f719d2c2751129191824977e21/transformed/jetified-leakcanary-object-watcher-android-2.7/AndroidManifest.xml:8:9-12:40
-97            android:name="leakcanary.internal.AppWatcherInstaller$MainProcess"
-97-->[com.squareup.leakcanary:leakcanary-object-watcher-android:2.7] /Users/kimseongju/.gradle/caches/transforms-3/08c438f719d2c2751129191824977e21/transformed/jetified-leakcanary-object-watcher-android-2.7/AndroidManifest.xml:9:13-79
-98            android:authorities="com.duke.orca.android.kotlin.lockscreencalendar.leakcanary-installer"
-98-->[com.squareup.leakcanary:leakcanary-object-watcher-android:2.7] /Users/kimseongju/.gradle/caches/transforms-3/08c438f719d2c2751129191824977e21/transformed/jetified-leakcanary-object-watcher-android-2.7/AndroidManifest.xml:10:13-72
-99            android:enabled="@bool/leak_canary_watcher_auto_install"
-99-->[com.squareup.leakcanary:leakcanary-object-watcher-android:2.7] /Users/kimseongju/.gradle/caches/transforms-3/08c438f719d2c2751129191824977e21/transformed/jetified-leakcanary-object-watcher-android-2.7/AndroidManifest.xml:11:13-69
-100            android:exported="false" />
-100-->[com.squareup.leakcanary:leakcanary-object-watcher-android:2.7] /Users/kimseongju/.gradle/caches/transforms-3/08c438f719d2c2751129191824977e21/transformed/jetified-leakcanary-object-watcher-android-2.7/AndroidManifest.xml:12:13-37
+41        <activity
+41-->/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/src/main/AndroidManifest.xml:33:9-37:50
+42            android:name="com.duke.orca.android.kotlin.lockscreencalendar.calendar.views.InstancesViewPagerActivity"
+42-->/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/src/main/AndroidManifest.xml:34:13-70
+43            android:excludeFromRecents="true"
+43-->/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/src/main/AndroidManifest.xml:35:13-46
+44            android:exported="true"
+44-->/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/src/main/AndroidManifest.xml:36:13-36
+45            android:theme="@style/Theme.Dialog" />
+45-->/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/src/main/AndroidManifest.xml:37:13-48
+46
+47        <service
+47-->[com.squareup.leakcanary:leakcanary-android:2.7] /Users/kimseongju/.gradle/caches/transforms-3/d55e02685142a1a4d169e79f7efa8c2a/transformed/jetified-leakcanary-android-2.7/AndroidManifest.xml:23:9-25:40
+48            android:name="leakcanary.internal.HeapAnalyzerService"
+48-->[com.squareup.leakcanary:leakcanary-android:2.7] /Users/kimseongju/.gradle/caches/transforms-3/d55e02685142a1a4d169e79f7efa8c2a/transformed/jetified-leakcanary-android-2.7/AndroidManifest.xml:24:13-67
+49            android:exported="false" />
+49-->[com.squareup.leakcanary:leakcanary-android:2.7] /Users/kimseongju/.gradle/caches/transforms-3/d55e02685142a1a4d169e79f7efa8c2a/transformed/jetified-leakcanary-android-2.7/AndroidManifest.xml:25:13-37
+50
+51        <activity
+51-->[com.karumi:dexter:6.2.2] /Users/kimseongju/.gradle/caches/transforms-3/cbda368b96f4e57a1e37202a87c80478/transformed/jetified-dexter-6.2.2/AndroidManifest.xml:27:9-29:72
+52            android:name="com.karumi.dexter.DexterActivity"
+52-->[com.karumi:dexter:6.2.2] /Users/kimseongju/.gradle/caches/transforms-3/cbda368b96f4e57a1e37202a87c80478/transformed/jetified-dexter-6.2.2/AndroidManifest.xml:28:13-60
+53            android:theme="@style/Dexter.Internal.Theme.Transparent" />
+53-->[com.karumi:dexter:6.2.2] /Users/kimseongju/.gradle/caches/transforms-3/cbda368b96f4e57a1e37202a87c80478/transformed/jetified-dexter-6.2.2/AndroidManifest.xml:29:13-69
+54
+55        <provider
+55-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:29:9-37:20
+56            android:name="leakcanary.internal.LeakCanaryFileProvider"
+56-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:30:13-70
+57            android:authorities="com.squareup.leakcanary.fileprovider.com.duke.orca.android.kotlin.lockscreencalendar"
+57-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:31:13-88
+58            android:exported="false"
+58-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:32:13-37
+59            android:grantUriPermissions="true" >
+59-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:33:13-47
+60            <meta-data
+60-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:34:13-36:66
+61                android:name="android.support.FILE_PROVIDER_PATHS"
+61-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:35:17-67
+62                android:resource="@xml/leak_canary_file_paths" />
+62-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:36:17-63
+63        </provider>
+64
+65        <activity
+65-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:39:9-44:66
+66            android:name="leakcanary.internal.activity.LeakActivity"
+66-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:40:13-69
+67            android:icon="@mipmap/leak_canary_icon"
+67-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:41:13-52
+68            android:label="@string/leak_canary_display_activity_label"
+68-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:42:13-71
+69            android:taskAffinity="com.squareup.leakcanary.com.duke.orca.android.kotlin.lockscreencalendar"
+69-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:43:13-76
+70            android:theme="@style/leak_canary_LeakCanary.Base" />
+70-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:44:13-63
+71
+72        <activity-alias
+72-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:46:9-63:26
+73            android:name="leakcanary.internal.activity.LeakLauncherActivity"
+73-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:47:13-77
+74            android:banner="@drawable/leak_canary_tv_icon"
+74-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:48:13-59
+75            android:enabled="@bool/leak_canary_add_launcher_icon"
+75-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:49:13-66
+76            android:exported="true"
+76-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:50:13-36
+77            android:icon="@mipmap/leak_canary_icon"
+77-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:51:13-52
+78            android:label="@string/leak_canary_display_activity_label"
+78-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:52:13-71
+79            android:targetActivity="leakcanary.internal.activity.LeakActivity"
+79-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:53:13-79
+80            android:taskAffinity="com.squareup.leakcanary.com.duke.orca.android.kotlin.lockscreencalendar"
+80-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:54:13-76
+81            android:theme="@style/leak_canary_LeakCanary.Base" >
+81-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:55:13-63
+82            <intent-filter>
+82-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:56:13-62:29
+83                <action android:name="android.intent.action.MAIN" />
+83-->/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/src/main/AndroidManifest.xml:27:17-69
+83-->/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/src/main/AndroidManifest.xml:27:25-66
+84
+85                <category android:name="android.intent.category.LAUNCHER" />
+85-->/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/src/main/AndroidManifest.xml:29:17-77
+85-->/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/src/main/AndroidManifest.xml:29:27-74
+86                <!-- Android TV launcher intent -->
+87                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+87-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:61:17-86
+87-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:61:27-83
+88            </intent-filter>
+89        </activity-alias>
+90
+91        <activity
+91-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:65:9-71:68
+92            android:name="leakcanary.internal.RequestStoragePermissionActivity"
+92-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:66:13-80
+93            android:excludeFromRecents="true"
+93-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:67:13-46
+94            android:icon="@mipmap/leak_canary_icon"
+94-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:68:13-52
+95            android:label="@string/leak_canary_storage_permission_activity_label"
+95-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:69:13-82
+96            android:taskAffinity="com.squareup.leakcanary.com.duke.orca.android.kotlin.lockscreencalendar"
+96-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:70:13-76
+97            android:theme="@style/leak_canary_Theme.Transparent" />
+97-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:71:13-65
+98
+99        <receiver android:name="leakcanary.internal.NotificationReceiver" />
+99-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:73:9-77
+99-->[com.squareup.leakcanary:leakcanary-android-core:2.7] /Users/kimseongju/.gradle/caches/transforms-3/80f06e4729332359ec3de5974e554eb6/transformed/jetified-leakcanary-android-core-2.7/AndroidManifest.xml:73:19-74
+100
 101        <provider
-101-->[com.squareup.leakcanary:plumber-android:2.7] /Users/kimseongju/.gradle/caches/transforms-3/325cf3afe226b7b45e70ca560a3bf44a/transformed/jetified-plumber-android-2.7/AndroidManifest.xml:8:9-12:40
-102            android:name="leakcanary.internal.PlumberInstaller"
-102-->[com.squareup.leakcanary:plumber-android:2.7] /Users/kimseongju/.gradle/caches/transforms-3/325cf3afe226b7b45e70ca560a3bf44a/transformed/jetified-plumber-android-2.7/AndroidManifest.xml:9:13-64
-103            android:authorities="com.duke.orca.android.kotlin.lockscreencalendar.plumber-installer"
-103-->[com.squareup.leakcanary:plumber-android:2.7] /Users/kimseongju/.gradle/caches/transforms-3/325cf3afe226b7b45e70ca560a3bf44a/transformed/jetified-plumber-android-2.7/AndroidManifest.xml:10:13-69
-104            android:enabled="@bool/leak_canary_plumber_auto_install"
-104-->[com.squareup.leakcanary:plumber-android:2.7] /Users/kimseongju/.gradle/caches/transforms-3/325cf3afe226b7b45e70ca560a3bf44a/transformed/jetified-plumber-android-2.7/AndroidManifest.xml:11:13-69
+101-->[com.squareup.leakcanary:leakcanary-object-watcher-android:2.7] /Users/kimseongju/.gradle/caches/transforms-3/08c438f719d2c2751129191824977e21/transformed/jetified-leakcanary-object-watcher-android-2.7/AndroidManifest.xml:8:9-12:40
+102            android:name="leakcanary.internal.AppWatcherInstaller$MainProcess"
+102-->[com.squareup.leakcanary:leakcanary-object-watcher-android:2.7] /Users/kimseongju/.gradle/caches/transforms-3/08c438f719d2c2751129191824977e21/transformed/jetified-leakcanary-object-watcher-android-2.7/AndroidManifest.xml:9:13-79
+103            android:authorities="com.duke.orca.android.kotlin.lockscreencalendar.leakcanary-installer"
+103-->[com.squareup.leakcanary:leakcanary-object-watcher-android:2.7] /Users/kimseongju/.gradle/caches/transforms-3/08c438f719d2c2751129191824977e21/transformed/jetified-leakcanary-object-watcher-android-2.7/AndroidManifest.xml:10:13-72
+104            android:enabled="@bool/leak_canary_watcher_auto_install"
+104-->[com.squareup.leakcanary:leakcanary-object-watcher-android:2.7] /Users/kimseongju/.gradle/caches/transforms-3/08c438f719d2c2751129191824977e21/transformed/jetified-leakcanary-object-watcher-android-2.7/AndroidManifest.xml:11:13-69
 105            android:exported="false" />
-105-->[com.squareup.leakcanary:plumber-android:2.7] /Users/kimseongju/.gradle/caches/transforms-3/325cf3afe226b7b45e70ca560a3bf44a/transformed/jetified-plumber-android-2.7/AndroidManifest.xml:12:13-37
-106    </application>
-107
-108</manifest>
+105-->[com.squareup.leakcanary:leakcanary-object-watcher-android:2.7] /Users/kimseongju/.gradle/caches/transforms-3/08c438f719d2c2751129191824977e21/transformed/jetified-leakcanary-object-watcher-android-2.7/AndroidManifest.xml:12:13-37
+106        <provider
+106-->[com.squareup.leakcanary:plumber-android:2.7] /Users/kimseongju/.gradle/caches/transforms-3/325cf3afe226b7b45e70ca560a3bf44a/transformed/jetified-plumber-android-2.7/AndroidManifest.xml:8:9-12:40
+107            android:name="leakcanary.internal.PlumberInstaller"
+107-->[com.squareup.leakcanary:plumber-android:2.7] /Users/kimseongju/.gradle/caches/transforms-3/325cf3afe226b7b45e70ca560a3bf44a/transformed/jetified-plumber-android-2.7/AndroidManifest.xml:9:13-64
+108            android:authorities="com.duke.orca.android.kotlin.lockscreencalendar.plumber-installer"
+108-->[com.squareup.leakcanary:plumber-android:2.7] /Users/kimseongju/.gradle/caches/transforms-3/325cf3afe226b7b45e70ca560a3bf44a/transformed/jetified-plumber-android-2.7/AndroidManifest.xml:10:13-69
+109            android:enabled="@bool/leak_canary_plumber_auto_install"
+109-->[com.squareup.leakcanary:plumber-android:2.7] /Users/kimseongju/.gradle/caches/transforms-3/325cf3afe226b7b45e70ca560a3bf44a/transformed/jetified-plumber-android-2.7/AndroidManifest.xml:11:13-69
+110            android:exported="false" />
+110-->[com.squareup.leakcanary:plumber-android:2.7] /Users/kimseongju/.gradle/caches/transforms-3/325cf3afe226b7b45e70ca560a3bf44a/transformed/jetified-plumber-android-2.7/AndroidManifest.xml:12:13-37
+111    </application>
+112
+113</manifest>

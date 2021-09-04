@@ -32,10 +32,6 @@
         "source": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/src/main/res/drawable/ic_round_calendar_today_48.xml"
     },
     {
-        "merged": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/build/intermediates/merged_res/debug/layout_fragment_instances_view_pager.xml.flat",
-        "source": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/src/main/res/layout/fragment_instances_view_pager.xml"
-    },
-    {
         "merged": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/build/intermediates/merged_res/debug/anim_fade_in.xml.flat",
         "source": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/src/main/res/anim/fade_in.xml"
     },
@@ -58,6 +54,10 @@
     {
         "merged": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/build/intermediates/merged_res/debug/mipmap-anydpi-v26_ic_launcher_round.xml.flat",
         "source": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml"
+    },
+    {
+        "merged": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/build/intermediates/merged_res/debug/transition_explode.xml.flat",
+        "source": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/src/main/res/transition/explode.xml"
     },
     {
         "merged": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/build/intermediates/merged_res/debug/layout_permission.xml.flat",
@@ -102,6 +102,10 @@
     {
         "merged": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/build/intermediates/merged_res/debug/mipmap-xxhdpi_ic_launcher_round.webp.flat",
         "source": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/build/intermediates/merged_res/debug/layout_activity_instances_view_pager.xml.flat",
+        "source": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/src/main/res/layout/activity_instances_view_pager.xml"
     },
     {
         "merged": "/Users/kimseongju/AndroidStudioProjects/LockScreenCalendar/app/build/intermediates/merged_res/debug/layout_fragment_instances_view.xml.flat",
