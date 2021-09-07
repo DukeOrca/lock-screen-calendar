@@ -1,5 +1,6 @@
 package com.duke.orca.android.kotlin.lockscreencalendar.calendar.model
 
+import android.text.style.BackgroundColorSpan
 import androidx.annotation.ColorInt
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.util.getYearMonthDay
 import java.util.*
@@ -11,10 +12,13 @@ data class Instance(
     val end: Long,
     val endDay: Int,
     val eventId: Long,
+    val duration: Int,
     val isAllDay: Boolean,
     val startDay: Int,
     val title: String,
-    var isVisible: Boolean = true
+    var isTransparent: Boolean = false,
+    var isVisible: Boolean = true,
+    var spanCount: Int = 1
 ) {
     private val beginCalendar = Calendar.getInstance().apply {
         timeInMillis = begin
@@ -27,7 +31,11 @@ data class Instance(
     val beginYearMonthDay = beginCalendar.getYearMonthDay()
     val endYearMonthDay = endCalendar.getYearMonthDay()
 
-    var spanCount = 1
+    fun isFillBackgroundColor() = when {
+        isAllDay -> true
+        spanCount > 1 -> true
+        else -> false
+    }
 
     fun copy(deep: Boolean = true): Instance {
         return if (deep) {
@@ -36,6 +44,7 @@ data class Instance(
                 calendarColor = calendarColor,
                 end = end,
                 endDay = endDay,
+                duration = duration,
                 startDay = startDay,
                 eventId = eventId,
                 isAllDay = isAllDay,

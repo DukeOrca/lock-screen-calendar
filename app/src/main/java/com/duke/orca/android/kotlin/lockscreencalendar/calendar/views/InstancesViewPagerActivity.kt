@@ -1,22 +1,27 @@
 package com.duke.orca.android.kotlin.lockscreencalendar.calendar.views
 
 import android.os.Bundle
-import android.os.PersistableBundle
+import android.transition.Transition
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.activity.viewModels
-import androidx.fragment.app.activityViewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.duke.orca.android.kotlin.lockscreencalendar.PACKAGE_NAME
 import com.duke.orca.android.kotlin.lockscreencalendar.base.BaseActivity
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.adapter.InstancesViewAdapter
-import com.duke.orca.android.kotlin.lockscreencalendar.calendar.adapter.InstancesViewAdapter2
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.pagetransformer.PageTransformer
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.viewmodel.InstancesViewModel
 import com.duke.orca.android.kotlin.lockscreencalendar.databinding.ActivityInstancesViewPagerBinding
 import java.util.*
 import java.util.concurrent.TimeUnit
+import androidx.annotation.RequiresApi
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
+import androidx.transition.Explode
+import com.duke.orca.android.kotlin.lockscreencalendar.base.BaseFragment
+import timber.log.Timber
+
 
 class InstancesViewPagerActivity : BaseActivity<ActivityInstancesViewPagerBinding>() {
     override fun inflate(inflater: LayoutInflater): ActivityInstancesViewPagerBinding {
@@ -33,13 +38,14 @@ class InstancesViewPagerActivity : BaseActivity<ActivityInstancesViewPagerBindin
         const val DATE = "$PREFIX.DATE"
     }
 
-    private val adapter by lazy { InstancesViewAdapter2(this) }
+    private val adapter by lazy { InstancesViewAdapter(this) }
     private val calendar = Calendar.getInstance()
     private val offscreenPageLimit = 3
 
     private val onPageChangeCallback by lazy {
         object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
+                //startPostponedEnterTransition()
                 super.onPageSelected(position)
                 val amount = position - InstancesViewAdapter.START_POSITION
                 val calendar = Calendar.getInstance().apply {
@@ -53,6 +59,7 @@ class InstancesViewPagerActivity : BaseActivity<ActivityInstancesViewPagerBindin
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         viewBinding.viewPager2.transitionName = "transition_name"
 
         window?.setFlags(
@@ -63,10 +70,11 @@ class InstancesViewPagerActivity : BaseActivity<ActivityInstancesViewPagerBindin
         window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
 
         setFinishOnTouchOutside(true)
+        val year = intent?.getIntExtra(Key.YEAR, 0) ?: 0
+        val month = intent?.getIntExtra(Key.MONTH, 0) ?: 0
+        val date = intent?.getIntExtra(Key.DATE, 0) ?: 0
 
-        val year = intent?.getIntExtra(InstancesViewPagerFragment.Key.YEAR, 0) ?: 0
-        val month = intent?.getIntExtra(InstancesViewPagerFragment.Key.MONTH, 0) ?: 0
-        val date = intent?.getIntExtra(InstancesViewPagerFragment.Key.DATE, 0) ?: 0
+        window.sharedElementEnterTransition = android.transition.Explode()
 
         initializeViews()
         viewBinding.viewPager2.setCurrentItem(startPosition(year, month, date), false)

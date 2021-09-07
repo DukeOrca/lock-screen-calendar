@@ -3,16 +3,12 @@ package com.duke.orca.android.kotlin.lockscreencalendar.main.views
 import android.app.ActivityOptions
 import android.content.Intent
 import android.os.Bundle
-import android.provider.CalendarContract
-import android.transition.TransitionInflater
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.findFragment
 import androidx.transition.Explode
 import androidx.viewpager2.widget.ViewPager2
 import com.duke.orca.android.kotlin.lockscreencalendar.PACKAGE_NAME
@@ -22,8 +18,6 @@ import com.duke.orca.android.kotlin.lockscreencalendar.calendar.DAYS_PER_WEEK
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.MONTHS_PER_YEAR
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.adapter.CalendarViewAdapter
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.views.InstancesViewPagerActivity
-import com.duke.orca.android.kotlin.lockscreencalendar.calendar.views.InstancesViewPagerFragment
-import com.duke.orca.android.kotlin.lockscreencalendar.calendar.widget.CalendarItemView
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.widget.CalendarView
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.widget.DayOfWeekItemView
 import com.duke.orca.android.kotlin.lockscreencalendar.databinding.FragmentMainBinding
@@ -31,7 +25,6 @@ import com.duke.orca.android.kotlin.lockscreencalendar.main.viewmodel.MainViewMo
 import com.duke.orca.android.kotlin.lockscreencalendar.main.views.MainFragment.ActivityResultLauncher.KEY_PERMISSION
 import com.duke.orca.android.kotlin.lockscreencalendar.permission.PermissionChecker
 import com.duke.orca.android.kotlin.lockscreencalendar.permission.view.PermissionRationaleDialogFragment
-import timber.log.Timber
 import java.util.*
 
 class MainFragment : BaseFragment<FragmentMainBinding>(), PermissionRationaleDialogFragment.OnPermissionActionClickListener {
@@ -206,25 +199,28 @@ class MainFragment : BaseFragment<FragmentMainBinding>(), PermissionRationaleDia
 //        })
 
         viewModel.showEvents.observe(viewLifecycleOwner, { item ->
-            InstancesViewPagerFragment().also {
-                val arguments = Bundle().apply {
-                    putInt(InstancesViewPagerFragment.Key.YEAR, item.year)
-                    putInt(InstancesViewPagerFragment.Key.MONTH, item.month)
-                    putInt(InstancesViewPagerFragment.Key.DATE, item.date)
-                }
+            val arguments = Bundle().apply {
+                putInt(InstancesViewPagerActivity.Key.YEAR, item.year)
+                putInt(InstancesViewPagerActivity.Key.MONTH, item.month)
+                putInt(InstancesViewPagerActivity.Key.DATE, item.date)
+            }
 
-                val view = viewBinding.viewPager2.findViewWithTag<CalendarView>(item.year * 100 + item.month)
-                val rview = view.getChildAt(item.position)
+            val view = viewBinding.viewPager2.findViewWithTag<CalendarView>(item.year * 100 + item.month)
+            val rview = view.getChildAt(item.position)
 
-                val activityOptions = ActivityOptions.makeSceneTransitionAnimation(
-                    requireActivity(), rview, "transition_name"
-                )
-                val intent = Intent(requireContext(), InstancesViewPagerActivity::class.java).apply {
-                    putExtra(InstancesViewPagerFragment.Key.YEAR, item.year)
-                    putExtra(InstancesViewPagerFragment.Key.MONTH, item.month)
-                    putExtra(InstancesViewPagerFragment.Key.DATE, item.date)
-                }
-                startActivity(intent)//, activityOptions.toBundle())
+            val activityOptions = ActivityOptions.makeSceneTransitionAnimation(
+                requireActivity(), rview, "transition_name"
+            )
+            val intent = Intent(requireContext(), InstancesViewPagerActivity::class.java).apply {
+                putExtra(InstancesViewPagerActivity.Key.YEAR, item.year)
+                putExtra(InstancesViewPagerActivity.Key.MONTH, item.month)
+                putExtra(InstancesViewPagerActivity.Key.DATE, item.date)
+            }
+            startActivity(intent, activityOptions.toBundle())
+        })
+            //, activityOptions.toBundle())
+            //InstancesViewPagerFragment().also {
+
 
 //                it.arguments = arguments
 //
@@ -255,8 +251,8 @@ class MainFragment : BaseFragment<FragmentMainBinding>(), PermissionRationaleDia
 //                    .replace(R.id.fragment_container_view, it, it.tag)
 //                    .addToBackStack(null)
 //                    .commit()
-            }
-        })
+           // }
+        //})
 
         viewModel.intent.observe(viewLifecycleOwner, { intent ->
             intent.action?.let { action ->

@@ -4,13 +4,7 @@ import androidx.annotation.ColorInt
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.VISIBLE_INSTANCE_COUNT
 
 sealed class Model {
-    data class Calendar(
-        val year: Int,
-        val month: Int,
-        val items: Array<CalendarItem?>,
-        val indexOfFirstDayOfMonth: Int,
-        val indexOfLastDayOfMonth: Int,
-    )
+
 
     data class Event(
         val id: Long,

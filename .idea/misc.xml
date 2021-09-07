@@ -10,6 +10,7 @@
         <entry key="app/src/main/res/drawable/ic_sharp_calendar_today_48.xml" value="0.1671875" />
         <entry key="app/src/main/res/drawable/ic_sharp_event_24.xml" value="0.1671875" />
         <entry key="app/src/main/res/drawable/rounded_corners.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_instances_view_pager.xml" value="0.12447916666666667" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.165" />
         <entry key="app/src/main/res/layout/blind_screen.xml" value="0.1" />
         <entry key="app/src/main/res/layout/calendar_item.xml" value="0.1" />

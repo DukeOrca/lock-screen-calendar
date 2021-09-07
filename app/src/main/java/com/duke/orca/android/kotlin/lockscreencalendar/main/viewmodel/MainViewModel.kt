@@ -6,7 +6,7 @@ import android.provider.CalendarContract
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.duke.orca.android.kotlin.lockscreencalendar.calendar.model.CalendarItem
+import com.duke.orca.android.kotlin.lockscreencalendar.calendar.model.CalItem2
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.model.Instance
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.model.Model
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.repository.CalendarRepositoryImpl
@@ -38,16 +38,16 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         _selectedDate.value = value
     }
 
-    private val _showEvents = SingleLiveEvent<CalendarItem>()
-    val showEvents: LiveData<CalendarItem>
+    private val _showEvents = SingleLiveEvent<CalItem2>()
+    val showEvents: LiveData<CalItem2>
         get() = _showEvents
 
-    fun callShowEvents(item: CalendarItem) {
+    fun callShowEvents(item: CalItem2) {
         _showEvents.value = item
     }
 
     var lastEvent: Model.Event? = null
-    var selectedItem: CalendarItem? = null
+    var selectedItem: CalItem2? = null
 
     fun insertEvent(year: Int, month: Int, date: Int) {
         lastEvent = repository.getLastEvent()

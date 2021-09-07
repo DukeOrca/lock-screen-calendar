@@ -8,17 +8,13 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import com.duke.orca.android.kotlin.lockscreencalendar.BLANK
 import com.duke.orca.android.kotlin.lockscreencalendar.R
-import com.duke.orca.android.kotlin.lockscreencalendar.calendar.DAYS_PER_WEEK
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.VISIBLE_INSTANCE_COUNT
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.model.CalItem2
-import com.duke.orca.android.kotlin.lockscreencalendar.calendar.model.CalendarItem
-import com.duke.orca.android.kotlin.lockscreencalendar.calendar.model.Model
-import com.duke.orca.android.kotlin.lockscreencalendar.calendar.widget.CalendarItemView.Height
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.widget.CalendarItemView.Margin.CALENDAR_COLOR_END
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.widget.CalendarItemView.Margin.CALENDAR_COLOR_START
-import com.duke.orca.android.kotlin.lockscreencalendar.calendar.widget.CalendarItemView.Margin.DATE_TOP
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.widget.CalendarItemView.Margin.DATE_BOTTOM
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.widget.CalendarItemView.Margin.DATE_START
+import com.duke.orca.android.kotlin.lockscreencalendar.calendar.widget.CalendarItemView.Margin.DATE_TOP
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.widget.CalendarItemView.Margin.INSTANCE_BOTTOM
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.widget.CalendarItemView.Margin.INSTANCE_END
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.widget.CalendarItemView.Margin.INSTANCE_START_LARGE
@@ -26,7 +22,6 @@ import com.duke.orca.android.kotlin.lockscreencalendar.calendar.widget.CalendarI
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.widget.CalendarItemView.Width.CALENDAR_COLOR
 import com.duke.orca.android.kotlin.lockscreencalendar.color.ColorCalculator
 import com.duke.orca.android.kotlin.lockscreencalendar.util.toPx
-import timber.log.Timber
 import java.util.*
 
 class CalendarItemView : View {
@@ -123,9 +118,6 @@ class CalendarItemView : View {
 
         currentY += DATE_BOTTOM.toPx
 
-        Timber.tag("sjk")
-        Timber.d("visible in itemview: ${item.yearMonthDay}  ${item.visibleInstances.map {it?.title}}")
-
         item.visibleInstances.forEachIndexed { index, instance ->
             if (index > VISIBLE_INSTANCE_COUNT) {
                 return@forEachIndexed
@@ -134,12 +126,12 @@ class CalendarItemView : View {
             bounds.set(0, 0, width, Height.INSTANCE.toPx)
 
             instance?.let {
-                val right = this.width * 1/*it.spanCount*/ - CALENDAR_COLOR_END.toPx
+                val right = this.width * it.spanCount - CALENDAR_COLOR_END.toPx
 
                 canvas.save()
                 canvas.clipRect(0, 0, right, this.height)
 
-                val title = if (true/*it.isVisible*/) {
+                val title = if (it.isVisible) {
                     calendarColorPaint.color = instance.calendarColor
                     instanceTextPaint.color = ColorCalculator.onBackgroundColor(
                         instance.calendarColor,
@@ -159,10 +151,10 @@ class CalendarItemView : View {
 //                    instanceTextPaint.alpha = ALPHA
 //                }
 
-                if (true/*it.isVisible*/) {
+                if (it.isVisible) {
                     val bottom = currentY.toInt() + bounds.height()
 
-                    if (false /*instance.fillBackgroundColor*/) {
+                    if (instance.isFillBackgroundColor()) {
                         canvas.drawRect(calendarColorRect.apply {
                             set(CALENDAR_COLOR_START.toPx, currentY.toInt(), right, bottom)
                         }, calendarColorPaint)
@@ -173,7 +165,7 @@ class CalendarItemView : View {
                     }
                 }
 
-                val x = if (false/*it.fillBackgroundColor*/)
+                val x = if (it.isFillBackgroundColor())
                     INSTANCE_START_SMALL.toPx
                 else
                     INSTANCE_START_LARGE.toPx

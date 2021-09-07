@@ -7,32 +7,27 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.children
 import com.duke.orca.android.kotlin.lockscreencalendar.R
-import com.duke.orca.android.kotlin.lockscreencalendar.calendar.DAYS_PER_MONTH
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.DAYS_PER_WEEK
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.VISIBLE_INSTANCE_COUNT
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.WEEKS_PER_MONTH
-import com.duke.orca.android.kotlin.lockscreencalendar.calendar.model.CalItem2
-import com.duke.orca.android.kotlin.lockscreencalendar.calendar.model.CalendarItem
-import com.duke.orca.android.kotlin.lockscreencalendar.calendar.model.CalendarMap
-import com.duke.orca.android.kotlin.lockscreencalendar.calendar.model.Model
+import com.duke.orca.android.kotlin.lockscreencalendar.calendar.model.*
+import com.duke.orca.android.kotlin.lockscreencalendar.calendar.util.getYearMonthDay
 import com.duke.orca.android.kotlin.lockscreencalendar.calendar.util.toDate
 import com.duke.orca.android.kotlin.lockscreencalendar.util.toPx
 import timber.log.Timber
-import java.time.YearMonth
 import java.util.*
 
 class CalendarView : ViewGroup {
     private var onItemClickListener: OnItemClickListener? = null
 
     private var selectedPosition = -1
-    private var selectedCalendarItem: CalendarItem? = null
-    private var currentArray = arrayListOf<CalItem2>()
+    private var selectedCalendarItem: CalItem2? = null
     private lateinit var calendarMap : CalendarMap
 
-    var indexOfFirstDayOfMonth = 0
+    private val pairMap = linkedMapOf<Int, Pair<CalItem2, CalendarItemView>>()
 
     interface OnItemClickListener {
-        fun onItemClick(item: CalendarItem)
+        fun onItemClick(view: CalendarItemView, item: CalItem2)
     }
 
     fun setOnItemClickListener(onItemClickListener: OnItemClickListener) {
@@ -92,42 +87,7 @@ class CalendarView : ViewGroup {
             val top = (index / DAYS_PER_WEEK) * height
 
             view.layout(left.toInt(), top.toInt(), (left + width).toInt(), (top + height).toInt())
-//            view.setOnClickListener {
-//                val item = currentArray[index] ?: return@setOnClickListener
-//                val position = currentArray[index]?.position ?: -1
-//
-//                if (selectedPosition != position) {
-//                    if (selectedPosition != -1) {
-//                        getChildAt(selectedPosition).background = null
-//                    }
-//
-//                    if (item is CalendarItem.DayOfMonth) {
-//                        it.setBackgroundResource(R.drawable.background_calendar_view_item_selected)
-//                    }
-//
-//                    selectedCalendarItem = item
-//                    selectedPosition = position
-//                }
-//
-//                onItemClickListener?.onItemClick(item)
-//            }
-
-            view.tag = index
         }
-    }
-
-    fun setCalendar(calendar: Model.Calendar) {
-//        currentArray = calendar.items
-//        indexOfFirstDayOfMonth = calendar.indexOfFirstDayOfMonth
-//
-//        removeAllViews()
-//
-//        repeat(DAYS_PER_MONTH) { index ->
-//            addView(CalendarItemView(context, currentArray[index]).apply {
-//                val item = currentArray[index] ?: return@apply
-//                tag = item.year * 10000 + item.month * 100 + item.date
-//            })
-//        }
     }
 
     fun select(date: Int) {
@@ -156,23 +116,39 @@ class CalendarView : ViewGroup {
 //        }
     }
 
+    fun getView(key: Int) = pairMap[key]?.second
+
     fun set(calendarMap: CalendarMap) {
         this.calendarMap = calendarMap
-        //indexOfFirstDayOfMonth = calendar.indexOfFirstDayOfMonth
-
         removeAllViews()
 
         repeat(WEEKS_PER_MONTH) {
             val dates = this.calendarMap.linkedHashMap[it]?.dates ?: emptyMap()
 
             dates.forEach { entry ->
-                Timber.tag("sjk")
-                Timber.d("hu" + entry.value.visibleInstances.map{it?.title}.toString() + "__" +
-                        entry.value.visibleInstances.map{it?.beginYearMonthDay}.toString())
-                addView(CalendarItemView(context, entry.value).apply {
-                    val item = entry.value
-                    tag = item.year * 10000 + item.month * 100 + item.date
-                })
+                val item = entry.value
+
+                val view = CalendarItemView(context, entry.value).apply {
+                    tag = item.yearMonthDay
+
+                }
+
+                pairMap[item.yearMonthDay] = item to view
+
+                view.setOnClickListener {
+                    if (selectedPosition != item.yearMonthDay) {
+                        pairMap[selectedPosition]?.second?.background = null
+                    }
+
+                    it.setBackgroundResource(R.drawable.background_calendar_view_item_selected)
+
+                    selectedPosition = item.yearMonthDay
+                    selectedCalendarItem = item
+
+                    onItemClickListener?.onItemClick(view, item)
+                }
+
+                addView(view)
             }
         }
     }
@@ -184,24 +160,63 @@ class CalendarView : ViewGroup {
         }
     }
 
-    class Adapter {
-        val currentList = arrayListOf<Map<Int, CalendarItem>>()
+    class CalendarMap(val year: Int, val month: Int) {
+        val linkedHashMap = linkedMapOf<Int, AdapterItem.Week>()
 
-        fun setInstances(weekOfMonth: Int, instances: List<Model.Instance>) {
-            for (instance in instances) {
-                val item = currentList[weekOfMonth][instance.begin.toDate()] ?: continue
+        fun get(weekOfMonth: Int): AdapterItem.Week? {
+            if (weekOfMonth in 0 until WEEKS_PER_MONTH) {
+                return linkedHashMap[weekOfMonth]
+            } else {
+                throw IndexOutOfBoundsException()
+            }
+        }
 
-                item.instances.add(instance)
+        fun setInstances() {
 
-                for (i in 0 until VISIBLE_INSTANCE_COUNT) {
-                    if (item.visibleInstances[i] == null) {
-                        item.visibleInstances[i] = instance
-                        break
-                    }
+        }
+
+        init {
+            val calendar = Calendar.getInstance().apply {
+                set(Calendar.YEAR, year)
+                set(Calendar.MONTH, month)
+                set(Calendar.WEEK_OF_MONTH, 1)
+                //set(Calendar.DATE, 1)
+                set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY)
+                set(Calendar.HOUR_OF_DAY, 0)
+                set(Calendar.MINUTE, 0)
+                set(Calendar.SECOND, 1)
+            }
+
+            Timber.tag("sjk")
+            Timber.d("caldddd: ${calendar.get(Calendar.MONTH)} ${calendar.get(Calendar.DATE)}")
+
+            for (i in 0 until WEEKS_PER_MONTH) {
+                val week = AdapterItem.Week(linkedMapOf())
+
+                linkedHashMap[i] = week
+
+                for (j in 0 until DAYS_PER_WEEK) {
+                    val key = calendar.getYearMonthDay()
+                    val date = calendar.get(Calendar.DATE)
+                    val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
+                    val month = calendar.get(Calendar.MONTH)
+                    val year = calendar.get(Calendar.YEAR)
+
+                    calendar.add(Calendar.DATE, 1)
+                    week.dates[key] = (CalItem2(
+                        position = i * 7 + j,
+                        date = date,
+                        dayOfWeek = dayOfWeek,
+                        month = month,
+                        year = year,
+                        nextKey = calendar.getYearMonthDay()
+                    ))
                 }
             }
         }
 
-        class ViewHolder(private val itemView: View, private val item: CalendarItem)
+        fun createView(context: Context, item: CalItem2): CalendarItemView {
+            return CalendarItemView(context, item)
+        }
     }
 }

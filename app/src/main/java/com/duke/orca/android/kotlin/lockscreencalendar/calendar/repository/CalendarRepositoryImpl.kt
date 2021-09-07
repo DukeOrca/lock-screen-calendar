@@ -27,6 +27,11 @@ class CalendarRepositoryImpl(private val applicationContext: Context) {
     private val contentResolver = applicationContext.contentResolver
     private val permissions = listOf(READ_CALENDAR, WRITE_CALENDAR)
 
+    private val WHERE_CALENDARS_SELECTED = CalendarContract.Calendars.VISIBLE + "=?"
+    private val WHERE_CALENDARS_ARGS = arrayOf(
+        "1"
+    )
+
     private object Calendars {
         val projections: Array<String> = arrayOf(
             CalendarContract.Calendars._ID,
@@ -127,7 +132,7 @@ class CalendarRepositoryImpl(private val applicationContext: Context) {
         val calendar = Calendar.getInstance().apply {
             set(Calendar.YEAR, year)
             set(Calendar.MONTH, month)
-            set(Calendar.DATE, 1)
+            set(Calendar.WEEK_OF_MONTH, 1)
             set(Calendar.DAY_OF_WEEK, 1)
             set(Calendar.HOUR_OF_DAY, 0)
             set(Calendar.MINUTE, 0)
@@ -138,9 +143,9 @@ class CalendarRepositoryImpl(private val applicationContext: Context) {
             repeat(WEEKS_PER_MONTH) {
                 val list = arrayListOf<Instance>()
 
-                val begin = calendar.timeInMillis
-                val end = Calendar.getInstance().apply {
-                    timeInMillis = begin
+                val dtstart = calendar.timeInMillis
+                val dtend = Calendar.getInstance().apply {
+                    timeInMillis = dtstart
                     add(Calendar.DATE, DAYS_PER_WEEK.dec())
                     set(Calendar.HOUR_OF_DAY, 23)
                     set(Calendar.MINUTE, 59)
@@ -149,14 +154,14 @@ class CalendarRepositoryImpl(private val applicationContext: Context) {
 
                 val builder = CalendarContract.Instances.CONTENT_URI.buildUpon()
 
-                ContentUris.appendId(builder, begin)
-                ContentUris.appendId(builder, end)
+                ContentUris.appendId(builder, dtstart)
+                ContentUris.appendId(builder, dtend)
 
                 val cursor = contentResolver.query(
                     builder.build(),
                     Instances.projections,
-                    null,
-                    null,
+                    WHERE_CALENDARS_SELECTED,
+                    WHERE_CALENDARS_ARGS,
                     Instances.sortOrder
                 ) ?: return@withContext
 
@@ -165,7 +170,6 @@ class CalendarRepositoryImpl(private val applicationContext: Context) {
 
                     val allDay = cursor.getIntOrNull(Instances.Index.ALL_DAY) ?: 0
                     val begin = cursor.getLongOrNull(Instances.Index.BEGIN) ?: 0L
-                    val beginDay = cursor.getLongOrNull(Instances.Index.BEGIN) ?: 0
                     val calendarColor = cursor.getIntOrNull(Instances.Index.CALENDAR_COLOR) ?: Color.TRANSPARENT
                     val end = cursor.getLongOrNull(Instances.Index.END) ?: 0L
                     val endDay = cursor.getIntOrNull(Instances.Index.END_DAY) ?: 0
@@ -181,6 +185,7 @@ class CalendarRepositoryImpl(private val applicationContext: Context) {
                             end = end,
                             endDay = endDay,
                             eventId = eventId,
+                            duration = endDay - startDay,
                             isAllDay = allDay == 1,
                             title = title,
                         )

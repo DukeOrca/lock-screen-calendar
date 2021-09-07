@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.*
 
-class InstancesViewAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
+class InstancesViewAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapter(fragmentActivity) {
 
     override fun getItemCount(): Int = ITEM_COUNT
 
